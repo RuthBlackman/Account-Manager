@@ -1,3 +1,5 @@
+import 'package:account_manger/pages/welcome_page.dart';
+import 'package:account_manger/theme/light_mode.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,6 +13,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
+      home: WelcomePage(),
+      theme: lightMode,
+        routes: {
+          '/welcome_page':(context) => const WelcomePage(),
+        }
     );
   }
 
