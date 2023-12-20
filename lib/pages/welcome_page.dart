@@ -22,7 +22,7 @@ class WelcomePage extends StatelessWidget {
 
                   // button
                   MyButton(
-                      text: "Welcome",
+                      text: "Continue",
                       width: 127,
                       height: 67,
                       color: lightBlue,
