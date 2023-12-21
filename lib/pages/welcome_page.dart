@@ -27,7 +27,7 @@ class WelcomePage extends StatelessWidget {
                       height: 67,
                       color: lightBlue,
                       onTap: () {
-                        Navigator.pushNamed(context, '/welcome_page');
+                        Navigator.pushNamed(context, '/first_time_page');
                       }
                     )
 

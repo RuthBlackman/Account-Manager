@@ -1,3 +1,4 @@
+import 'package:account_manger/pages/first_time_page.dart';
 import 'package:account_manger/pages/welcome_page.dart';
 import 'package:account_manger/theme/light_mode.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       theme: lightMode,
         routes: {
           '/welcome_page':(context) => const WelcomePage(),
+          '/first_time_page':(context) => const FirstTimePage(),
         }
     );
   }
