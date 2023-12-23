@@ -15,6 +15,8 @@ class FirstTimePage extends StatelessWidget {
       backgroundColor: blueBackground,
       body: Container(
         child: MyContainer(
+          isStarsContainer: false,
+          height: 800,
           children: [
             WidgetWithCustomWidth(
               widget: const Column(
@@ -36,7 +38,9 @@ class FirstTimePage extends StatelessWidget {
                   width: 80,
                   height: 75,
                   color: greyButton,
-                  onTap: () {}
+                  onTap: () {
+                    Navigator.pushNamed(context, '/account_info_page');
+                  }
               ),
               width: 160,
             ),

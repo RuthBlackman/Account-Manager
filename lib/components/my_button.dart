@@ -5,6 +5,7 @@ class MyButton extends StatelessWidget {
   final double width;
   final double height;
   final Color color;
+  final IconData? icon;
   final void Function()? onTap;
   const MyButton({
     super.key,
@@ -13,6 +14,7 @@ class MyButton extends StatelessWidget {
     required this.height,
     required this.color,
     required this.onTap,
+    this.icon,
   });
 
   @override
@@ -23,21 +25,32 @@ class MyButton extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          //color: Theme.of(context).colorScheme.primary,
           color: color,
           borderRadius: BorderRadius.circular(12),
         ),
         padding: const EdgeInsets.all(25),
         child: Center(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              if(icon != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2.0),
+                  child: Icon(icon),
+                ),
+            ],
           ),
         ),
       ),
     );
-  }
-}
+  }}

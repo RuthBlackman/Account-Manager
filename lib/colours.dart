@@ -6,3 +6,4 @@ Color purpleBackground = const Color(0xFF4E148C);
 Color blueBackground = const Color(0xFFE5F3F8);
 Color white = const Color(0xFFFFFFFF);
 Color greyButton = const Color(0xFFD2DFE8);
+Color green = const Color(0xFF49FF87);
