@@ -1,3 +1,3 @@
-# account_manger
+# account_manager
 
-Account Manager 
+Account Manager for my Final Year Project 
