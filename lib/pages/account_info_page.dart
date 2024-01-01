@@ -1,6 +1,7 @@
 import 'package:account_manger/colours.dart';
 import 'package:account_manger/components/account_name.dart';
 import 'package:account_manger/components/category_dropdown.dart';
+import 'package:account_manger/components/more_information_dialog.dart';
 import 'package:account_manger/components/my_appbar.dart';
 import 'package:account_manger/components/my_button.dart';
 import 'package:account_manger/components/my_container.dart';
@@ -18,6 +19,14 @@ class AccountInfoPage extends StatelessWidget {
 
   final bool firstTimeUer = true; // hardcoded for now
 
+  void _showDialog(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (context){
+          return MoreInformationDialog();
+        }
+    );
+  }
 
 
   @override
@@ -91,7 +100,9 @@ class AccountInfoPage extends StatelessWidget {
                     width: 100,
                     height: 75,
                     color: greyButton,
-                    onTap: (){},
+                    onTap: (){
+                      _showDialog(context);
+                    },
                   ),
                 ),
                 width: 200,
