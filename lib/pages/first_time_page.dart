@@ -39,7 +39,8 @@ class FirstTimePage extends StatelessWidget {
                   height: 75,
                   color: greyButton,
                   onTap: () {
-                    Navigator.pushNamed(context, '/account_info_page');
+                    //Navigator.pushNamed(context, '/account_info_page');
+                    Navigator.pushReplacementNamed(context, '/account_info_page');
                   }
               ),
               width: 160,

@@ -132,7 +132,10 @@ class AccountInfoPage extends StatelessWidget {
                             height: 90,
                             color: greyButton,
                             icon: Icons.exit_to_app,
-                            onTap: (){},
+                            onTap: (){
+                              // Navigator.pushReplacementNamed(context, '/home_page');
+                              Navigator.pushReplacementNamed(context, '/routing');
+                            },
                           ),
                         ),
                         if(firstTimeUer)  Padding(
