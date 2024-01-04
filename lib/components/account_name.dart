@@ -9,7 +9,7 @@ class AccountNameWidget extends StatefulWidget {
 
 class _AccountNameWidgetState extends State<AccountNameWidget> {
   bool isEditing = false;
-  String accountName = 'Google'; // Hardcoded for now - will need to fetch
+  String accountName = 'Account'; // todo: fetch account name
 
   @override
   Widget build(BuildContext context) {

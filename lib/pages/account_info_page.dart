@@ -28,6 +28,8 @@ class AccountInfoPage extends StatelessWidget {
     );
   }
 
+  // todo: display default values if simply creating a new account
+  // todo: show details for specific account if user is editing an account
 
   @override
   Widget build(BuildContext context) {

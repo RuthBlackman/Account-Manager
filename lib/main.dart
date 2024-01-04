@@ -4,6 +4,7 @@ import 'package:account_manger/pages/first_time_page.dart';
 import 'package:account_manger/pages/home_page.dart';
 import 'package:account_manger/pages/routing.dart';
 import 'package:account_manger/pages/profile_page.dart';
+import 'package:account_manger/pages/security_report_page.dart';
 import 'package:account_manger/pages/settings_page.dart';
 import 'package:account_manger/pages/welcome_page.dart';
 import 'package:account_manger/theme/light_mode.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
           '/account_info_page':(context) => AccountInfoPage(),
           '/routing':(context) => Routing(),
            '/home_page':(context) => HomePage(),
+          '/security_report':(context) => SecurityReport(),
           '/accounts_page':(context) => AccountsPage(),
           '/profile_page':(context) => ProfilePage(),
           '/settings_page':(context) => SettingsPage(),
