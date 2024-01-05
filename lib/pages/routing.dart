@@ -1,3 +1,4 @@
+import 'package:account_manger/colours.dart';
 import 'package:account_manger/components/my_appbar.dart';
 import 'package:account_manger/components/my_navbar.dart';
 import 'package:account_manger/pages/home_page.dart';
@@ -48,13 +49,16 @@ class _RoutingState extends State<Routing> {
       body: Center(
         child: getPage(_currentIndex),
       ),
-      bottomNavigationBar: MyNavBar(
-        currentIndex: _currentIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+      bottomNavigationBar:  Container(
+        color: blueBackground,
+        child: MyNavBar(
+          currentIndex: _currentIndex,
+          onTap: (int index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+        ),
       ),
     );
   }

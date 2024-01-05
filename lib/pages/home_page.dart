@@ -48,83 +48,87 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 20.0),
-          child: Text(
-            "Welcome",
-            style: TextStyle(
-                fontSize: 20,
-                color: purpleBackground),
-          ),
-        ),
+    return Container(
+      color: blueBackground,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Text(
+                "Welcome",
+                style: TextStyle(
+                    fontSize: 20,
+                    color: purpleBackground),
+              ),
+            ),
 
-        Container(
-          width: 300,
-          child: MyContainer(
-              children: [
-                WidgetWithCustomWidth(
-                    widget: const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                        "Latest Report",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
+            Container(
+              width: 300,
+              child: MyContainer(
+                  children: [
+                    WidgetWithCustomWidth(
+                        widget: const Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Text(
+                            "Latest Report",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        )
+                    ),
+                    WidgetWithCustomWidth(
+                      widget: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "${numberOfProblems(generateProblemsMap())} problems",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.bold),// todo: edit this when we have actual data
                         ),
                       ),
-                    )
-                ),
-                WidgetWithCustomWidth(
-                  widget: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "${numberOfProblems(generateProblemsMap())} problems",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),// todo: edit this when we have actual data
                     ),
-                  ),
-                ),
-                WidgetWithCustomWidth(widget: Column(
-                  children: [
-                    ..._buildProblemWidgets(generateProblemsMap())
+                    WidgetWithCustomWidth(widget: Column(
+                      children: [
+                        ..._buildProblemWidgets(generateProblemsMap())
+                      ],
+                    ))
                   ],
-                ))
-              ],
-              height: 300,
-              isStarsContainer: false
-          ),
-        ),
+                  height: 300,
+                  isStarsContainer: false
+              ),
+            ),
 
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: MyButton(
-              text: "Start Scan",
-              width: 200,
-              height: 70,
-              color: white,
-              onTap: (){
-                // todo: open security report and start scan
-                Navigator.pushNamed(context, '/security_report');
-              }
-          ),
-        ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MyButton(
+                  text: "Start Scan",
+                  width: 200,
+                  height: 70,
+                  color: white,
+                  onTap: (){
+                    // todo: open security report and start scan
+                    Navigator.pushNamed(context, '/security_report');
+                  }
+              ),
+            ),
 
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: MyButton(
-              text: "Add Account",
-              width: 200,
-              height: 70,
-              color: white,
-              onTap: (){
-                // go to account info page, and clear values
-                Navigator.pushReplacementNamed(context, "/account_info_page");
-              }
-          ),
-        ),
-      ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MyButton(
+                  text: "Add Account",
+                  width: 200,
+                  height: 70,
+                  color: white,
+                  onTap: (){
+                    // go to account info page, and clear values
+                    Navigator.pushReplacementNamed(context, "/account_info_page");
+                  }
+              ),
+            ),
+          ],
+      ),
     );
   }
 }
