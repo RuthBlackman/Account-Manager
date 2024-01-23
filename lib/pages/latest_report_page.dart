@@ -8,14 +8,14 @@ enum Problems {
   MFANotActivated,
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class LatestReport extends StatefulWidget {
+  const LatestReport({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<LatestReport> createState() => _LatestReportState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _LatestReportState extends State<LatestReport> {
   // todo need to latest report (ie number of distinct problems, and number of accounts affected by those problems)
 
   // to demonstrate how page will look
@@ -53,15 +53,15 @@ class _HomePageState extends State<HomePage> {
       width: MediaQuery.of(context).size.width,
       child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Text(
-                "Welcome",
-                style: TextStyle(
-                    fontSize: 20,
-                    color: purpleBackground),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 20.0),
+            //   child: Text(
+            //     "Welcome",
+            //     style: TextStyle(
+            //         fontSize: 20,
+            //         color: purpleBackground),
+            //   ),
+            // ),
 
             Container(
               width: 300,
@@ -114,19 +114,19 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MyButton(
-                  text: "Add Account",
-                  width: 200,
-                  height: 70,
-                  color: white,
-                  onTap: (){
-                    // go to account info page, and clear values
-                    Navigator.pushReplacementNamed(context, "/account_info_page");
-                  }
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: MyButton(
+            //       text: "Add Account",
+            //       width: 200,
+            //       height: 70,
+            //       color: white,
+            //       onTap: (){
+            //         // go to account info page, and clear values
+            //         Navigator.pushReplacementNamed(context, "/account_info_page");
+            //       }
+            //   ),
+            // ),
           ],
       ),
     );

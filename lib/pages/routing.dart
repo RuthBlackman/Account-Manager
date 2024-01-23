@@ -1,7 +1,7 @@
 import 'package:account_manger/colours.dart';
 import 'package:account_manger/components/my_appbar.dart';
 import 'package:account_manger/components/my_navbar.dart';
-import 'package:account_manger/pages/home_page.dart';
+import 'package:account_manger/pages/latest_report_page.dart';
 import 'package:account_manger/pages/profile_page.dart';
 import 'package:account_manger/pages/accounts_page.dart';
 import 'package:account_manger/pages/settings_page.dart';
@@ -24,17 +24,17 @@ class _RoutingState extends State<Routing> {
   }
 
   final List<String> _names = [
-    "Home",
     "Accounts",
+    "Security Report",
     "Profile",
     "Settings",
   ];
 
   StatefulWidget getPage(index){
     if(index ==0){
-      return HomePage();
-    }else if(index == 1){
       return AccountsPage();
+    }else if(index == 1){
+      return LatestReport();
     }else if (index ==2){
       return ProfilePage();
     }else{

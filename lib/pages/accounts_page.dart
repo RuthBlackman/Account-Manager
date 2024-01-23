@@ -57,7 +57,7 @@ class _AccountsPageState extends State<AccountsPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                 child: GestureDetector(
-                  onTap: (){},
+                  onTap: (){Navigator.pushReplacementNamed(context, "/account_info_page");},
                   child: Container(
                     width: 180,
                     height: 50,

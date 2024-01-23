@@ -32,7 +32,7 @@ class _MyNavBarState extends State<MyNavBar> {
           selectedColor: Colors.black,
         ),
         DotNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: Icon(Icons.emoji_events),
           selectedColor: Colors.black,
         ),
         DotNavigationBarItem(

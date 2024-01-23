@@ -1,7 +1,7 @@
 import 'package:account_manger/pages/account_info_page.dart';
 import 'package:account_manger/pages/accounts_page.dart';
 import 'package:account_manger/pages/first_time_page.dart';
-import 'package:account_manger/pages/home_page.dart';
+import 'package:account_manger/pages/latest_report_page.dart';
 import 'package:account_manger/pages/routing.dart';
 import 'package:account_manger/pages/profile_page.dart';
 import 'package:account_manger/pages/security_report_page.dart';
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           '/first_time_page':(context) => const FirstTimePage(),
           '/account_info_page':(context) => AccountInfoPage(),
           '/routing':(context) => Routing(),
-           '/home_page':(context) => HomePage(),
+           '/latest_report_page':(context) => LatestReport(),
           '/security_report':(context) => SecurityReport(),
           '/accounts_page':(context) => AccountsPage(),
           '/profile_page':(context) => ProfilePage(),
