@@ -6,6 +6,9 @@ import 'package:account_manger/pages/profile_page.dart';
 import 'package:account_manger/pages/accounts_page.dart';
 import 'package:account_manger/pages/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/account_database.dart';
 
 class Routing extends StatefulWidget {
   const Routing({super.key});
@@ -15,6 +18,14 @@ class Routing extends StatefulWidget {
 }
 
 class _RoutingState extends State<Routing> {
+  @override
+  void initState(){
+    // read existing accounts on app starting
+    Provider.of<AccountDatabase>(context, listen: false).readAccounts();
+
+    super.initState();
+  }
+
   int _currentIndex = 0;
 
   void navigateNavBar(int index) {

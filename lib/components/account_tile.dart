@@ -1,8 +1,12 @@
 import 'package:account_manger/colours.dart';
+import 'package:account_manger/components/account_tile_dialog.dart';
 import 'package:flutter/material.dart';
 
+import '../models/account.dart';
+
 class AccountTile extends StatelessWidget {
-  const AccountTile({super.key});
+  final Account account;
+  const AccountTile({super.key, required this.account});
 
   @override
   Widget build(BuildContext context) {
@@ -24,28 +28,41 @@ class AccountTile extends StatelessWidget {
             // column for name and email address
             Column(
               children: [
-                Text(
-                  "Google",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: purpleBackground,
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8, top: 8.0),
+                  child: Container(
+                    width: 200, // Set a maximum width for the container
+                    child: Text(
+                      account.name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: purpleBackground,
+                      ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.fade,
+                    ),
                   ),
                 ),
-                Text(
-                  "email@google.com",
-                  style: TextStyle(
-                    color: Color(0xFFB8B8F3),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 8.0),
+                  child: Container(
+                    width: 200, // Set a maximum width for the container
+                    child: Text(
+                      account.username,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFB8B8F3),
+                      ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.fade,
+                    ),
                   ),
-                )
+                ),
               ],
             ),
 
             // button for options
-            IconButton(
-              // TODO: open menu that allows the user to navigate to specific account page
-                onPressed: (){},
-                icon: const Icon(Icons.more_horiz)
-            )
+            AccountTileDialog(account: account),
           ],
         ),
       ),

@@ -40,7 +40,13 @@ class FirstTimePage extends StatelessWidget {
                   color: greyButton,
                   onTap: () {
                     //Navigator.pushNamed(context, '/account_info_page');
-                    Navigator.pushReplacementNamed(context, '/account_info_page');
+                    Navigator.pushReplacementNamed(
+                      context,  "/account_info_page",
+                      arguments: {
+                        "mode": "add_account",
+                        "account": null,
+                      },
+                    );
                   }
               ),
               width: 160,

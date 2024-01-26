@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 
 class CategoryDropdown extends StatefulWidget {
-  const CategoryDropdown({super.key});
+  final String? category;
+  const CategoryDropdown({super.key, this.category});
 
   @override
   _CategoryDropdownState createState() => _CategoryDropdownState();
 }
 
 class _CategoryDropdownState extends State<CategoryDropdown> {
-
+  late String _selectedItem;
   List<String> categories = ['Email', 'Finance', 'Social Media', 'Entertainment', 'Cancel'];
-  String _selectedItem = '';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.category != null ){
+      if(categories.contains(widget.category)){
+        _selectedItem = widget.category!;
+      }else{
+        print("unknown category");
+        _selectedItem = '';
+      }
+    }else{
+      _selectedItem = '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +38,6 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
         ),
       ),
       iconSize: 0,
-
       hint: Text('Category'),
       onChanged: (String? newValue) {
         setState(() {
@@ -32,7 +46,6 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
           }else{
             _selectedItem = newValue ?? '';
           }
-
         });
       },
       items: categories.map((String value) {

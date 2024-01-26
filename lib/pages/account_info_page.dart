@@ -7,16 +7,21 @@ import 'package:account_manger/components/my_button.dart';
 import 'package:account_manger/components/my_container.dart';
 import 'package:account_manger/components/my_textfield.dart';
 import 'package:account_manger/components/star_icon.dart';
+import 'package:account_manger/models/test_account.dart';
 import 'package:flutter/material.dart';
+
+import '../models/account.dart';
 
 class AccountInfoPage extends StatelessWidget {
   AccountInfoPage({super.key});
 
   // text editing controllers
-  final TextEditingController accountController = TextEditingController();
+  final TextEditingController accountController = TextEditingController(text: "Account");
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+
+  //TODO: if first time user, display next button, so they can add more accounts
   final bool firstTimeUer = true; // hardcoded for now
 
   void _showDialog(BuildContext context){
@@ -28,11 +33,46 @@ class AccountInfoPage extends StatelessWidget {
     );
   }
 
-  // todo: display default values if simply creating a new account
-  // todo: show details for specific account if user is editing an account
-
   @override
   Widget build(BuildContext context) {
+    // check whether user is editing/viewing an account or creating a new one
+    final dynamic arguments = ModalRoute.of(context)?.settings.arguments;
+
+    print(arguments);
+
+    String category = '';
+
+    if(arguments != null ){
+      String? operation = arguments['mode'] ?? null ;
+      Account? account = arguments['account'] ?? null;
+
+      print(operation);
+      print(account);
+
+      if(operation == "add_account"){
+        print("user is adding an account!");
+      }else if (operation == "edit_account" && account != null) {
+        print("user is editing ${account.name} !");
+
+        // edit the controllers
+        accountController.text = account.name;
+        usernameController.text = account.username;
+        passwordController.text = account.password;
+
+        // edit category
+        category = account.category;
+
+      }else{
+        print("error, ${operation}, ${account}");
+      }
+    }
+
+
+    // int howManyStars(){
+    //
+    // }
+
+
     return Scaffold(
       appBar: const MyAppBar(title: "Account Information"),
       backgroundColor: blueBackground,
@@ -69,10 +109,10 @@ class AccountInfoPage extends StatelessWidget {
               isStarsContainer: false,
               height: 500,
               children: [
-                WidgetWithCustomWidth(widget: AccountNameWidget()),
+                WidgetWithCustomWidth(widget: AccountNameWidget( accountName: accountController.text,)),
 
                 WidgetWithCustomWidth(
-                  widget: CategoryDropdown(),
+                  widget: CategoryDropdown(category: category,),
                   width: 250,
                 ),
 

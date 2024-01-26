@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AccountNameWidget extends StatefulWidget {
-  const AccountNameWidget({super.key});
+  final String accountName;
+  const AccountNameWidget({Key? key, required this.accountName}) : super(key: key);
 
   @override
   _AccountNameWidgetState createState() => _AccountNameWidgetState();
@@ -9,32 +10,33 @@ class AccountNameWidget extends StatefulWidget {
 
 class _AccountNameWidgetState extends State<AccountNameWidget> {
   bool isEditing = false;
-  String accountName = 'Account'; // todo: fetch account name
+  late TextEditingController accountNameController;
+
+  @override
+  void initState() {
+    super.initState();
+    accountNameController = TextEditingController(text: widget.accountName);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              isEditing = true;
-            });
-          },
-          child: isEditing ? _editableText() : _staticText(),
-        ),
-      );
+      padding: const EdgeInsets.all(20.0),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            isEditing = true;
+          });
+        },
+        child: isEditing ? _editableText() : _staticText(),
+      ),
+    );
   }
 
   // user is editing, so return textformfield
   Widget _editableText() {
     return TextFormField(
-      initialValue: accountName,
-      onChanged: (newValue) {
-        setState(() {
-          accountName = newValue;
-        });
-      },
+      controller: accountNameController,
       textAlign: TextAlign.center,
       style: const TextStyle(
         fontSize: 30,
@@ -53,11 +55,13 @@ class _AccountNameWidgetState extends State<AccountNameWidget> {
   // user is not editing, so just show a Text widget with the account name
   Widget _staticText() {
     return Text(
-      accountName,
+      widget.accountName,
       textAlign: TextAlign.center,
       style: const TextStyle(
         fontSize: 30,
       ),
+      maxLines: 1, // maximum number of lines to display
+      overflow: TextOverflow.ellipsis,
     );
   }
 }
