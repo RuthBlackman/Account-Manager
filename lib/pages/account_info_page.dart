@@ -9,8 +9,10 @@ import 'package:account_manger/components/my_textfield.dart';
 import 'package:account_manger/components/star_icon.dart';
 import 'package:account_manger/models/test_account.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/account.dart';
+import '../models/account_database.dart';
 
 class AccountInfoPage extends StatelessWidget {
   AccountInfoPage({super.key});
@@ -41,10 +43,14 @@ class AccountInfoPage extends StatelessWidget {
     print(arguments);
 
     String category = '';
+    Account? account;
+    String accountName = 'Account';
 
     if(arguments != null ){
       String? operation = arguments['mode'] ?? null ;
-      Account? account = arguments['account'] ?? null;
+      // Account? account = arguments['account'] ?? null;
+      account = arguments['account'] ?? null;
+
 
       print(operation);
       print(account);
@@ -54,8 +60,10 @@ class AccountInfoPage extends StatelessWidget {
       }else if (operation == "edit_account" && account != null) {
         print("user is editing ${account.name} !");
 
+        accountName = account.name;
+
         // edit the controllers
-        accountController.text = account.name;
+        accountController.text = accountName;
         usernameController.text = account.username;
         passwordController.text = account.password;
 
@@ -72,6 +80,13 @@ class AccountInfoPage extends StatelessWidget {
     //
     // }
 
+    void categoryChanged(String newCategory){
+      category = newCategory;
+    }
+
+    void accountNameChanged(String newAccountName){
+      accountName = newAccountName;
+    }
 
     return Scaffold(
       appBar: const MyAppBar(title: "Account Information"),
@@ -109,10 +124,10 @@ class AccountInfoPage extends StatelessWidget {
               isStarsContainer: false,
               height: 500,
               children: [
-                WidgetWithCustomWidth(widget: AccountNameWidget( accountName: accountController.text,)),
+                WidgetWithCustomWidth(widget: AccountNameWidget( accountName: accountController.text, onAccountNameChanged: accountNameChanged)),
 
                 WidgetWithCustomWidth(
-                  widget: CategoryDropdown(category: category,),
+                  widget: CategoryDropdown(category: category, onCategoryChanged: categoryChanged),
                   width: 250,
                 ),
 
@@ -150,6 +165,7 @@ class AccountInfoPage extends StatelessWidget {
                   width: 200,
                 ),
 
+                // button to save account and then exit to accounts page
                 WidgetWithCustomWidth(
                     widget: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,7 +179,26 @@ class AccountInfoPage extends StatelessWidget {
                             height: 90,
                             color: greyButton,
                             icon: Icons.add,
-                            onTap: (){},
+                            onTap: (){
+                              // get the fields
+                              // String accountName = accountController.text;
+                              String accountCategory = category;
+                              String accountUsername = usernameController.text;
+                              String accountPassword = passwordController.text;
+
+                              // todo: need to get fields in 'enter more info'
+
+
+                              // if account exists, simply edit it
+                              if(account != null){
+                                context.read<AccountDatabase>().editAccount(account.id, accountName, accountCategory, accountUsername, accountPassword);
+                              }else{ // account is null so create new account
+                                context.read<AccountDatabase>().addAccount(accountName, accountCategory, accountUsername, accountPassword);
+                              }
+
+                              // return to accounts page
+                              Navigator.pushReplacementNamed(context, '/routing');
+                            },
                           ),
                         ),
                         Padding(

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class AccountNameWidget extends StatefulWidget {
   final String accountName;
-  const AccountNameWidget({Key? key, required this.accountName}) : super(key: key);
+  final void Function(String) onAccountNameChanged;
+  const AccountNameWidget({Key? key, required this.accountName, required this.onAccountNameChanged}) : super(key: key);
 
   @override
   _AccountNameWidgetState createState() => _AccountNameWidgetState();
@@ -11,11 +12,13 @@ class AccountNameWidget extends StatefulWidget {
 class _AccountNameWidgetState extends State<AccountNameWidget> {
   bool isEditing = false;
   late TextEditingController accountNameController;
+  late String accountName;
 
   @override
   void initState() {
     super.initState();
-    accountNameController = TextEditingController(text: widget.accountName);
+    accountName = widget.accountName;
+    accountNameController = TextEditingController(text: accountName);
   }
 
   @override
@@ -47,6 +50,8 @@ class _AccountNameWidgetState extends State<AccountNameWidget> {
       onEditingComplete: () {
         setState(() {
           isEditing = false;
+          widget.onAccountNameChanged(accountNameController.text);
+          accountName = accountNameController.text;
         });
       },
     );
@@ -55,7 +60,7 @@ class _AccountNameWidgetState extends State<AccountNameWidget> {
   // user is not editing, so just show a Text widget with the account name
   Widget _staticText() {
     return Text(
-      widget.accountName,
+      accountName,
       textAlign: TextAlign.center,
       style: const TextStyle(
         fontSize: 30,

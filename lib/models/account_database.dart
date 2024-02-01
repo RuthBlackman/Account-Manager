@@ -8,6 +8,10 @@ import 'account.dart';
 class AccountDatabase extends ChangeNotifier{
   static late Isar isar;
 
+  /*
+  Setup database
+   */
+
   // Initialise Database
   static Future<void> initialise() async{
     final dir = await getApplicationDocumentsDirectory();
@@ -68,6 +72,29 @@ class AccountDatabase extends ChangeNotifier{
 
   // Update
   // update all parameters
+  Future<void> editAccount(int id, String name, String category, String username, String password) async {
+    // find the specific account
+    final account = await isar.accounts.get(id);
+
+    // update fields
+    // name and category are manadatory for every account (even a device can have this)
+    if(name != null && category != null){
+      await isar.writeTxn(() async {
+        // update fields
+        account!.name = name;
+        account!.category = category;
+        account.username = username;
+        account.password = password;
+
+        // save updated account back to db
+        await isar.accounts.put(account);
+      });
+    }
+
+    // re-read from db
+    readAccounts();
+
+  }
 
   // Delete account
   Future<void> deleteAccount(int id) async {
