@@ -75,7 +75,6 @@ class AccountInfoPage extends StatelessWidget {
       }
     }
 
-
     // int howManyStars(){
     //
     // }
@@ -188,16 +187,44 @@ class AccountInfoPage extends StatelessWidget {
 
                               // todo: need to get fields in 'enter more info'
 
+                              if(category == ""){
+                                final snackBar = SnackBar(
+                                  backgroundColor: Colors.red,
+                                  content: const Text('Account must have a category.'),
+                                  duration: const Duration(seconds: 5),
+                                  action: SnackBarAction(
+                                    label: 'Dismiss',
+                                    onPressed: () {
+                                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                    },
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              }else if (accountName == 'Account') {
+                                final snackBar = SnackBar(
+                                  backgroundColor: Colors.red,
+                                  content: const Text('Please tap on \'Account\' to create a name for the account.'),
+                                  duration: const Duration(seconds: 5),
+                                  action: SnackBarAction(
+                                    label: 'Dismiss',
+                                    onPressed: () {
+                                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                    },
+                                  ),
+                                );
 
-                              // if account exists, simply edit it
-                              if(account != null){
-                                context.read<AccountDatabase>().editAccount(account.id, accountName, accountCategory, accountUsername, accountPassword);
-                              }else{ // account is null so create new account
-                                context.read<AccountDatabase>().addAccount(accountName, accountCategory, accountUsername, accountPassword);
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              }else{
+                                // if account exists, simply edit it
+                                if(account != null){
+                                  context.read<AccountDatabase>().editAccount(account.id, accountName, accountCategory, accountUsername, accountPassword);
+                                }else{ // account is null so create new account
+                                  context.read<AccountDatabase>().addAccount(accountName, accountCategory, accountUsername, accountPassword);
+                                }
+
+                                // return to accounts page
+                                Navigator.pushReplacementNamed(context, '/routing');
                               }
-
-                              // return to accounts page
-                              Navigator.pushReplacementNamed(context, '/routing');
                             },
                           ),
                         ),
@@ -229,8 +256,12 @@ class AccountInfoPage extends StatelessWidget {
                       ],
                     )
                 ),
+
+
               ],
             ),
+
+
 
             // stars
             MyContainer(

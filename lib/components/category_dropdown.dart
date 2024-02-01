@@ -11,7 +11,7 @@ class CategoryDropdown extends StatefulWidget {
 
 class _CategoryDropdownState extends State<CategoryDropdown> {
   late String _selectedItem;
-  List<String> categories = ['Email', 'Finance', 'Social Media', 'Entertainment', 'Cancel'];
+  List<String> categories = ['Physical Device', 'Email', 'Finance', 'Social Media', 'Entertainment', 'Cancel'];
 
   @override
   void initState() {
