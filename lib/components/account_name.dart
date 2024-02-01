@@ -13,12 +13,14 @@ class _AccountNameWidgetState extends State<AccountNameWidget> {
   bool isEditing = false;
   late TextEditingController accountNameController;
   late String accountName;
+  late FocusNode focusNode;
 
   @override
   void initState() {
     super.initState();
     accountName = widget.accountName;
     accountNameController = TextEditingController(text: accountName);
+    focusNode = FocusNode();
   }
 
   @override
@@ -30,6 +32,7 @@ class _AccountNameWidgetState extends State<AccountNameWidget> {
           setState(() {
             isEditing = true;
           });
+          focusNode.requestFocus(); // give focus to TextFormField in _editableText()
         },
         child: isEditing ? _editableText() : _staticText(),
       ),
@@ -41,6 +44,7 @@ class _AccountNameWidgetState extends State<AccountNameWidget> {
     return TextFormField(
       controller: accountNameController,
       textAlign: TextAlign.center,
+      focusNode: focusNode,
       style: const TextStyle(
         fontSize: 30,
       ),
