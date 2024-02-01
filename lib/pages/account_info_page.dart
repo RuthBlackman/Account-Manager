@@ -1,5 +1,6 @@
 import 'package:account_manger/colours.dart';
 import 'package:account_manger/components/account_name.dart';
+import 'package:account_manger/components/buttons/button_with_icon.dart';
 import 'package:account_manger/components/category_dropdown.dart';
 import 'package:account_manger/components/more_information_dialog.dart';
 import 'package:account_manger/components/my_appbar.dart';
@@ -87,6 +88,68 @@ class AccountInfoPage extends StatelessWidget {
       accountName = newAccountName;
     }
 
+    void saveButtonClicked(){
+      print("SAve");
+
+      // get the fields
+      // String accountName = accountController.text;
+      String accountCategory = category;
+      String accountUsername = usernameController.text;
+      String accountPassword = passwordController.text;
+
+      // todo: need to get fields in 'enter more info'
+
+      if(category == ""){
+        final snackBar = SnackBar(
+          backgroundColor: Colors.red,
+          content: const Text('Account must have a category.'),
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'Dismiss',
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }else if (accountName == 'Account') {
+        final snackBar = SnackBar(
+          backgroundColor: Colors.red,
+          content: const Text('Please tap on \'Account\' to create a name for the account.'),
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'Dismiss',
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }else{
+        // if account exists, simply edit it
+        if(account != null){
+          context.read<AccountDatabase>().editAccount(account.id, accountName, accountCategory, accountUsername, accountPassword);
+        }else{ // account is null so create new account
+          context.read<AccountDatabase>().addAccount(accountName, accountCategory, accountUsername, accountPassword);
+        }
+
+        // return to accounts page
+        Navigator.pushReplacementNamed(context, '/routing');
+      }
+    }
+
+    void discardButtonClicked(){
+      print("discard");
+      Navigator.pushReplacementNamed(context, '/routing');
+    }
+
+    void nextButtonClicked(){
+      print("next");
+
+      // TODO: clear all fields
+    }
+
     return Scaffold(
       appBar: const MyAppBar(title: "Account Information"),
       backgroundColor: blueBackground,
@@ -123,13 +186,16 @@ class AccountInfoPage extends StatelessWidget {
               isStarsContainer: false,
               height: 500,
               children: [
+                // account name
                 WidgetWithCustomWidth(widget: AccountNameWidget( accountName: accountController.text, onAccountNameChanged: accountNameChanged)),
 
+                // category
                 WidgetWithCustomWidth(
                   widget: CategoryDropdown(category: category, onCategoryChanged: categoryChanged),
                   width: 250,
                 ),
 
+                // username
                 WidgetWithCustomWidth(
                     width: 250,
                     widget: MyTextField(
@@ -139,6 +205,7 @@ class AccountInfoPage extends StatelessWidget {
                     )
                 ),
 
+                // password
                 WidgetWithCustomWidth(
                     width: 250,
                     widget: MyTextField(
@@ -148,6 +215,7 @@ class AccountInfoPage extends StatelessWidget {
                     )
                 ),
 
+                // open dialog to enter more information
                 WidgetWithCustomWidth(
                   widget: Padding(
                     padding: const EdgeInsets.only(top: 30.0),
@@ -164,104 +232,24 @@ class AccountInfoPage extends StatelessWidget {
                   width: 200,
                 ),
 
-                // button to save account and then exit to accounts page
                 WidgetWithCustomWidth(
                     widget: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0, right: 20.0),
-                          child: MyButton(
-                            text: "Save",
-                            width: 90,
-                            height: 90,
-                            color: greyButton,
-                            icon: Icons.add,
-                            onTap: (){
-                              // get the fields
-                              // String accountName = accountController.text;
-                              String accountCategory = category;
-                              String accountUsername = usernameController.text;
-                              String accountPassword = passwordController.text;
+                        // save button
+                        ButtonWithIcon(icon: Icons.add, text: "Save", onButtonClicked: saveButtonClicked,),
 
-                              // todo: need to get fields in 'enter more info'
+                        // discard button
+                        ButtonWithIcon(icon: Icons.exit_to_app, text: "Discard", onButtonClicked: discardButtonClicked,),
 
-                              if(category == ""){
-                                final snackBar = SnackBar(
-                                  backgroundColor: Colors.red,
-                                  content: const Text('Account must have a category.'),
-                                  duration: const Duration(seconds: 5),
-                                  action: SnackBarAction(
-                                    label: 'Dismiss',
-                                    onPressed: () {
-                                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                    },
-                                  ),
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                              }else if (accountName == 'Account') {
-                                final snackBar = SnackBar(
-                                  backgroundColor: Colors.red,
-                                  content: const Text('Please tap on \'Account\' to create a name for the account.'),
-                                  duration: const Duration(seconds: 5),
-                                  action: SnackBarAction(
-                                    label: 'Dismiss',
-                                    onPressed: () {
-                                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                    },
-                                  ),
-                                );
-
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                              }else{
-                                // if account exists, simply edit it
-                                if(account != null){
-                                  context.read<AccountDatabase>().editAccount(account.id, accountName, accountCategory, accountUsername, accountPassword);
-                                }else{ // account is null so create new account
-                                  context.read<AccountDatabase>().addAccount(accountName, accountCategory, accountUsername, accountPassword);
-                                }
-
-                                // return to accounts page
-                                Navigator.pushReplacementNamed(context, '/routing');
-                              }
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: MyButton(
-                            text: "Exit",
-                            width: 90,
-                            height: 90,
-                            color: greyButton,
-                            icon: Icons.exit_to_app,
-                            onTap: (){
-                              // Navigator.pushReplacementNamed(context, '/home_page');
-                              Navigator.pushReplacementNamed(context, '/routing');
-                            },
-                          ),
-                        ),
-                        if(firstTimeUer)  Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 20.0),
-                          child: MyButton(
-                            text: "Next",
-                            width: 90,
-                            height: 90,
-                            color: greyButton,
-                            icon: Icons.arrow_forward_outlined,
-                            onTap: (){},
-                          ),
-                        ),
+                        // next button
+                        if (firstTimeUer) ButtonWithIcon(icon: Icons.arrow_forward, text: "Next", onButtonClicked: nextButtonClicked,),
                       ],
                     )
                 ),
-
-
               ],
             ),
-
-
 
             // stars
             MyContainer(
