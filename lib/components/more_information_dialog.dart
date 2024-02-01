@@ -1,6 +1,6 @@
 // todo: score for an account is dependent on the user's answers
 
-import 'package:account_manger/components/my_button.dart';
+import 'package:account_manger/components/buttons/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:account_manger/components/my_checkbox.dart';
 import '../colours.dart';
@@ -41,7 +41,7 @@ class _MoreInformationDialogState extends State<MoreInformationDialog> {
                       const Padding(
                         padding: EdgeInsets.only(bottom: 10.0),
                         child: Text(
-                            "Extra Information",
+                          "Extra Information",
                           style: TextStyle(fontSize: 30),
                         ),
                       ),
@@ -85,17 +85,17 @@ class _MoreInformationDialogState extends State<MoreInformationDialog> {
                       ),
                     ],
                   ),
-                  MyButton(text: "Save & Close",
-                      width: 200,
-                      height: 79,
-                      color: greyButton,
-                      onTap: (){
-                        // TODO: save values so that they can be retrieved
+                  MyButton(
+                      text: "Save & Close",
+                      fontSize: 16,
+                      backgroundColour: greyButton,
+                      onButtonClicked: (){
+                        // TODO: store values in db
 
                         // close dialog
                         Navigator.pop(context);
                       }
-                  ),
+                  )
                 ],
               ),
             ),

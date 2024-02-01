@@ -1,5 +1,5 @@
 import 'package:account_manger/colours.dart';
-import 'package:account_manger/components/my_button.dart';
+import 'package:account_manger/components/buttons/my_button.dart';
 import 'package:account_manger/components/my_container.dart';
 import 'package:flutter/material.dart';
 
@@ -52,82 +52,67 @@ class _LatestReportState extends State<LatestReport> {
       color: blueBackground,
       width: MediaQuery.of(context).size.width,
       child: Column(
-          children: [
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 20.0),
-            //   child: Text(
-            //     "Welcome",
-            //     style: TextStyle(
-            //         fontSize: 20,
-            //         color: purpleBackground),
-            //   ),
-            // ),
+        children: [
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 20.0),
+          //   child: Text(
+          //     "Welcome",
+          //     style: TextStyle(
+          //         fontSize: 20,
+          //         color: purpleBackground),
+          //   ),
+          // ),
 
-            Container(
-              width: 300,
-              child: MyContainer(
-                  children: [
-                    WidgetWithCustomWidth(
-                        widget: const Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            "Latest Report",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        )
-                    ),
-                    WidgetWithCustomWidth(
-                      widget: Padding(
-                        padding: const EdgeInsets.all(8.0),
+          Container(
+            width: 300,
+            child: MyContainer(
+                children: [
+                  WidgetWithCustomWidth(
+                      widget: const Padding(
+                        padding: EdgeInsets.all(10.0),
                         child: Text(
-                          "${numberOfProblems(generateProblemsMap())} problems",
+                          "Latest Report",
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),// todo: edit this when we have actual data
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
                         ),
+                      )
+                  ),
+                  WidgetWithCustomWidth(
+                    widget: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "${numberOfProblems(generateProblemsMap())} problems",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),// todo: edit this when we have actual data
                       ),
                     ),
-                    WidgetWithCustomWidth(widget: Column(
-                      children: [
-                        ..._buildProblemWidgets(generateProblemsMap())
-                      ],
-                    ))
-                  ],
-                  height: 300,
-                  isStarsContainer: false
-              ),
+                  ),
+                  WidgetWithCustomWidth(widget: Column(
+                    children: [
+                      ..._buildProblemWidgets(generateProblemsMap())
+                    ],
+                  ))
+                ],
+                height: 300,
+                isStarsContainer: false
             ),
+          ),
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MyButton(
-                  text: "Start Scan",
-                  width: 200,
-                  height: 70,
-                  color: white,
-                  onTap: (){
-                    // todo: open security report and start scan
-                    Navigator.pushNamed(context, '/security_report');
-                  }
-              ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: MyButton(
+              text: "Start Scan",
+              backgroundColour: Colors.white,
+              fontSize: 16,
+              onButtonClicked: (){
+                // TODO: open security report and start scan
+                Navigator.pushNamed(context, '/security_report');
+              },
             ),
-
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: MyButton(
-            //       text: "Add Account",
-            //       width: 200,
-            //       height: 70,
-            //       color: white,
-            //       onTap: (){
-            //         // go to account info page, and clear values
-            //         Navigator.pushReplacementNamed(context, "/account_info_page");
-            //       }
-            //   ),
-            // ),
-          ],
+          ),
+        ],
       ),
     );
   }

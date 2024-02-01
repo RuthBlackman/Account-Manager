@@ -1,6 +1,6 @@
 import 'package:account_manger/colours.dart';
+import 'package:account_manger/components/buttons/my_button.dart';
 import 'package:account_manger/components/my_appbar.dart';
-import 'package:account_manger/components/my_button.dart';
 import 'package:account_manger/components/my_container.dart';
 import 'package:account_manger/components/my_text.dart';
 import 'package:flutter/material.dart';
@@ -34,20 +34,18 @@ class FirstTimePage extends StatelessWidget {
 
             WidgetWithCustomWidth(
               widget: MyButton(
-                  text: "Continue",
-                  width: 80,
-                  height: 75,
-                  color: greyButton,
-                  onTap: () {
-                    //Navigator.pushNamed(context, '/account_info_page');
-                    Navigator.pushReplacementNamed(
-                      context,  "/account_info_page",
-                      arguments: {
-                        "mode": "add_account",
-                        "account": null,
-                      },
-                    );
-                  }
+                text: "Continue",
+                backgroundColour: greyButton,
+                fontSize: 16,
+                onButtonClicked: (){
+                  Navigator.pushReplacementNamed(
+                    context,  "/account_info_page",
+                    arguments: {
+                      "mode": "add_account",
+                      "account": null,
+                    },
+                  );
+                },
               ),
               width: 160,
             ),
@@ -57,10 +55,9 @@ class FirstTimePage extends StatelessWidget {
             WidgetWithCustomWidth(
               widget: MyButton(
                 text: "Privacy Policy",
-                width: 80,
-                height: 75,
-                color: greyButton,
-                onTap: (){},
+                backgroundColour: greyButton,
+                fontSize: 16,
+                onButtonClicked: (){},
               ),
               width: 160,
             )

@@ -1,14 +1,13 @@
 import 'package:account_manger/colours.dart';
 import 'package:account_manger/components/account_name.dart';
 import 'package:account_manger/components/buttons/button_with_icon.dart';
+import 'package:account_manger/components/buttons/my_button.dart';
 import 'package:account_manger/components/category_dropdown.dart';
 import 'package:account_manger/components/more_information_dialog.dart';
 import 'package:account_manger/components/my_appbar.dart';
-import 'package:account_manger/components/my_button.dart';
 import 'package:account_manger/components/my_container.dart';
 import 'package:account_manger/components/my_textfield.dart';
 import 'package:account_manger/components/star_icon.dart';
-import 'package:account_manger/models/test_account.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -88,9 +87,12 @@ class AccountInfoPage extends StatelessWidget {
       accountName = newAccountName;
     }
 
-    void saveButtonClicked(){
-      print("SAve");
+    void enterMoreInfoButtonClicked(){
+      print("enter more info!");
+      _showDialog(context);
+    }
 
+    void saveButtonClicked(){
       // get the fields
       // String accountName = accountController.text;
       String accountCategory = category;
@@ -140,7 +142,6 @@ class AccountInfoPage extends StatelessWidget {
     }
 
     void discardButtonClicked(){
-      print("discard");
       Navigator.pushReplacementNamed(context, '/routing');
     }
 
@@ -218,15 +219,12 @@ class AccountInfoPage extends StatelessWidget {
                 // open dialog to enter more information
                 WidgetWithCustomWidth(
                   widget: Padding(
-                    padding: const EdgeInsets.only(top: 30.0),
+                    padding: const EdgeInsets.only(top: 20.0),
                     child: MyButton(
                       text: "Enter More Info",
-                      width: 100,
-                      height: 75,
-                      color: greyButton,
-                      onTap: (){
-                        _showDialog(context);
-                      },
+                      fontSize: 16,
+                      onButtonClicked: enterMoreInfoButtonClicked,
+                      backgroundColour: greyButton,
                     ),
                   ),
                   width: 200,
@@ -276,4 +274,3 @@ class AccountInfoPage extends StatelessWidget {
     );
   }
 }
-
