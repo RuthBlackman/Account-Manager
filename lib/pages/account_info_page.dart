@@ -178,7 +178,8 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
         }
 
         // return to accounts page
-        Navigator.pushReplacementNamed(context, '/routing');
+        // Navigator.pushReplacementNamed(context, '/routing');
+        Navigator.of(context).pushNamedAndRemoveUntil('/routing', (Route<dynamic> route) => false);
       }
     }
 
@@ -191,7 +192,10 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
         context.read<AccountDatabase>().deleteAccount(account!.id);
       }
 
-      Navigator.pushReplacementNamed(context, '/routing');
+        //Navigator.pushReplacementNamed(context, '/routing');
+
+     Navigator.of(context).pushNamedAndRemoveUntil('/routing', (Route<dynamic> route) => false);
+
     }
 
     void nextButtonClicked(){
