@@ -43,50 +43,51 @@ class _MoreInformationDialogState extends State<MoreInformationDialog> {
       padding: const EdgeInsets.only(top: 50.0),
 
         child: Dialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
               borderRadius:BorderRadius.circular(30.0)),
           child: Padding(
             padding: const EdgeInsets.only(top: 30.0, left: 10, right: 10, bottom: 20),
-            child: Container(
-              // height: 550,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // PageView to show multiple pages
-                  Expanded(
-                    child: PageView(
-                      controller: _pageController,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _currentPage = index;
-                        });
-                      },
-                      children: [
-                        PageOne(account: account, onPageChange: onPageChange),
-                       PageTwo(account:  account),
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // PageView to show multiple pages
+                Expanded(
 
-                      ],
-                    ),
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
+                    children: [
+                      PageOne(account: account, onPageChange: onPageChange),
+                     PageTwo(account:  account),
+
+                    ],
                   ),
+                ),
 
-                  // Indicator to show the current page
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      2, // Number of pages
-                          (index) => Container(
-                        width: 10.0,
-                        height: 10.0,
-                        margin: EdgeInsets.symmetric(horizontal: 4.0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _currentPage == index ? Colors.blue : Colors.grey,
-                        ),
+                // Indicator to show the current page
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    2, // Number of pages
+                        (index) => Container(
+                      width: 10.0,
+                      height: 10.0,
+                      margin: EdgeInsets.symmetric(horizontal: 4.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _currentPage == index ? Colors.blue : Colors.grey,
                       ),
                     ),
                   ),
+                ),
 
-                  MyButton(
+                 MyButton(
                       text: "Close",
                       fontSize: 16,
                       backgroundColour: greyButton,
@@ -94,9 +95,10 @@ class _MoreInformationDialogState extends State<MoreInformationDialog> {
                         // close dialog
                         Navigator.pop(context);
                       }
-                  )
-                ],
-              ),
+                  ),
+
+                Container(color: Colors.red,),
+              ],
             ),
           ),
         ),

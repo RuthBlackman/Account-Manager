@@ -28,7 +28,7 @@ class _MyButtonState extends State<MyButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20.0, right: 20.0),
+      padding: const EdgeInsets.only(top: 20.0),
       child: TextButton(
         style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),

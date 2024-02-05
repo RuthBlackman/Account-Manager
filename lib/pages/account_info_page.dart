@@ -284,20 +284,23 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                 ),
 
                 WidgetWithCustomWidth(
-                    widget: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // save button
-                        ButtonWithIcon(icon: Icons.add, text: "Save", onButtonClicked: saveButtonClicked,),
+                    widget: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // save button
+                          ButtonWithIcon(icon: Icons.add, text: "Save", onButtonClicked: saveButtonClicked,),
 
-                        // discard button
-                        ButtonWithIcon(icon: Icons.exit_to_app, text: "Discard", onButtonClicked: discardButtonClicked,),
+                          // discard button
+                          ButtonWithIcon(icon: Icons.exit_to_app, text: "Discard", onButtonClicked: discardButtonClicked,),
 
-                        // next button
-                        if (firstTimeUer) ButtonWithIcon(icon: Icons.arrow_forward, text: "Next", onButtonClicked: nextButtonClicked,),
-                      ],
-                    )
+                          // next button
+                          if (firstTimeUer) ButtonWithIcon(icon: Icons.arrow_forward, text: "Next", onButtonClicked: nextButtonClicked,),
+                        ],
+                      ),
+                    ),
                 ),
               ],
             ),
