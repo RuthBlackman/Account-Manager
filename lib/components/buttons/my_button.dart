@@ -47,6 +47,6 @@ class _MyButtonState extends State<MyButton> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: size),
         ),
       ),
-    );;
+    );
   }
 }

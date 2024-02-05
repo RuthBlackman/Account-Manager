@@ -14,25 +14,47 @@ import 'package:provider/provider.dart';
 import '../models/account.dart';
 import '../models/account_database.dart';
 
-class AccountInfoPage extends StatelessWidget {
+class AccountInfoPage extends StatefulWidget {
   AccountInfoPage({super.key});
 
+  @override
+  State<AccountInfoPage> createState() => _AccountInfoPageState();
+}
+
+class _AccountInfoPageState extends State<AccountInfoPage> {
   // text editing controllers
   final TextEditingController accountController = TextEditingController(text: "Account");
+
   final TextEditingController usernameController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
 
-
   //TODO: if first time user, display next button, so they can add more accounts
-  final bool firstTimeUer = true; // hardcoded for now
+  final bool firstTimeUer = true;
+  // hardcoded for now
+
+  late void Function(Account)? onAccountChange;
+
+  Account? newAccount;
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
 
   void _showDialog(BuildContext context){
     showDialog(
         context: context,
         builder: (context){
-          return MoreInformationDialog();
+          return MoreInformationDialog(account: newAccount!, onDialogChange: onDialogChanged,);
         }
     );
+  }
+
+  void onDialogChanged(Account updatedAccount){
+    newAccount = updatedAccount;
+
   }
 
   @override
@@ -52,20 +74,22 @@ class AccountInfoPage extends StatelessWidget {
       account = arguments['account'] ?? null;
 
 
-      print(operation);
-      print(account);
+      // print(operation);
+      // print(account);
 
       if(operation == "add_account"){
-        print("user is adding an account!");
-      }else if (operation == "edit_account" && account != null) {
-        print("user is editing ${account.name} !");
+        // print("user is adding an account!");
+        account = context.read<AccountDatabase>().createEmptyAccount();
 
-        accountName = account.name;
+      }else if (operation == "edit_account" && account != null) {
+        // print("user is editing ${account.name} !");
+
+        accountName = account!.name;
 
         // edit the controllers
         accountController.text = accountName;
-        usernameController.text = account.username;
-        passwordController.text = account.password;
+        usernameController.text = account!.username;
+        passwordController.text = account!.password;
 
         // edit category
         category = account.category;
@@ -73,6 +97,13 @@ class AccountInfoPage extends StatelessWidget {
       }else{
         print("error, ${operation}, ${account}");
       }
+    }
+
+
+    if(newAccount != null) {
+      account = newAccount;
+    } else if (account != null) {
+      newAccount = account;
     }
 
     // int howManyStars(){
@@ -88,18 +119,15 @@ class AccountInfoPage extends StatelessWidget {
     }
 
     void enterMoreInfoButtonClicked(){
-      print("enter more info!");
+      context.read<AccountDatabase>().readAccounts();
       _showDialog(context);
     }
 
     void saveButtonClicked(){
       // get the fields
-      // String accountName = accountController.text;
       String accountCategory = category;
       String accountUsername = usernameController.text;
       String accountPassword = passwordController.text;
-
-      // todo: need to get fields in 'enter more info'
 
       if(category == ""){
         final snackBar = SnackBar(
@@ -131,9 +159,22 @@ class AccountInfoPage extends StatelessWidget {
       }else{
         // if account exists, simply edit it
         if(account != null){
-          context.read<AccountDatabase>().editAccount(account.id, accountName, accountCategory, accountUsername, accountPassword);
+
+          account.name= accountName;
+          account.category = accountCategory;
+          account.username = accountUsername;
+          account.password = accountPassword;
+
+
+          context.read<AccountDatabase>().updateAccount(account);
         }else{ // account is null so create new account
-          context.read<AccountDatabase>().addAccount(accountName, accountCategory, accountUsername, accountPassword);
+          // context.read<AccountDatabase>().addAccount(accountName, accountCategory, accountUsername, accountPassword);
+          account?.name= accountName;
+          account?.category = accountCategory;
+          account?.username = accountUsername;
+          account?.password = accountPassword;
+
+          context.read<AccountDatabase>().updateAccount(account!);
         }
 
         // return to accounts page
@@ -142,6 +183,14 @@ class AccountInfoPage extends StatelessWidget {
     }
 
     void discardButtonClicked(){
+      final dynamic arguments = ModalRoute.of(context)?.settings.arguments;
+      String? operation = arguments['mode'] ?? null ;
+
+      // if user clicked on add account, but then didnt save anything, then delete the account
+      if(operation == "add_account"){
+        context.read<AccountDatabase>().deleteAccount(account!.id);
+      }
+
       Navigator.pushReplacementNamed(context, '/routing');
     }
 

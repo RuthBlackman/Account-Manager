@@ -110,7 +110,7 @@ class _AccountsPageState extends State<AccountsPage> {
       itemBuilder: (context, index){
         final account = currentAccounts[index];
 
-        print(account.name);
+        // print("Accounts list page: ${account.name} has ${account.incomingAccounts}");
 
         return AccountTile(account: account);
       }

@@ -25,6 +25,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController categoryController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController accessController = TextEditingController();
+  final TextEditingController idController = TextEditingController();
 
   // create new account
   void createNewAccount(){
@@ -51,6 +53,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 controller: passwordController,
                 decoration: const InputDecoration(hintText: "enter password",),
               ),
+              TextField(
+                controller: accessController,
+                decoration: const InputDecoration(hintText: "enter access type",),
+              ),
+              TextField(
+                controller: idController,
+                decoration: const InputDecoration(hintText: "enter account id",),
+              ),
             ],
           ),
         ),
@@ -62,6 +72,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       categoryController.clear();
                       usernameController.clear();
                       passwordController.clear();
+                      accessController.clear();
+                      idController.clear();
               Navigator.of(context).pop();
             },
           ),
@@ -71,8 +83,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     String newUsername = usernameController.text;
                     String newPassword = passwordController.text;
 
+                    String accessType = accessController.text;
+                    int id = int.parse(idController.text);
+
+                    // print("access: ${accessType} and incoming id: ${id}");
+
                     // save to db
-                    context.read<AccountDatabase>().addAccount(newAccountName, newCategory, newUsername, newPassword);
+                    context.read<AccountDatabase>().addAccountTest(newAccountName, newCategory, newUsername, newPassword, accessType, id);
+
+
 
                     // pop box
                     Navigator.pop(context);

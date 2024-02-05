@@ -22,18 +22,23 @@ const AccountSchema = CollectionSchema(
       name: r'category',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(
+    r'incomingAccounts': PropertySchema(
       id: 1,
+      name: r'incomingAccounts',
+      type: IsarType.stringList,
+    ),
+    r'name': PropertySchema(
+      id: 2,
       name: r'name',
       type: IsarType.string,
     ),
     r'password': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'password',
       type: IsarType.string,
     ),
     r'username': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'username',
       type: IsarType.string,
     )
@@ -44,14 +49,7 @@ const AccountSchema = CollectionSchema(
   deserializeProp: _accountDeserializeProp,
   idName: r'id',
   indexes: {},
-  links: {
-    r'incomingAccounts': LinkSchema(
-      id: 5946780117296864018,
-      name: r'incomingAccounts',
-      target: r'Account',
-      single: false,
-    )
-  },
+  links: {},
   embeddedSchemas: {},
   getId: _accountGetId,
   getLinks: _accountGetLinks,
@@ -66,6 +64,13 @@ int _accountEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.category.length * 3;
+  bytesCount += 3 + object.incomingAccounts.length * 3;
+  {
+    for (var i = 0; i < object.incomingAccounts.length; i++) {
+      final value = object.incomingAccounts[i];
+      bytesCount += value.length * 3;
+    }
+  }
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.password.length * 3;
   bytesCount += 3 + object.username.length * 3;
@@ -79,9 +84,10 @@ void _accountSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.category);
-  writer.writeString(offsets[1], object.name);
-  writer.writeString(offsets[2], object.password);
-  writer.writeString(offsets[3], object.username);
+  writer.writeStringList(offsets[1], object.incomingAccounts);
+  writer.writeString(offsets[2], object.name);
+  writer.writeString(offsets[3], object.password);
+  writer.writeString(offsets[4], object.username);
 }
 
 Account _accountDeserialize(
@@ -93,9 +99,10 @@ Account _accountDeserialize(
   final object = Account();
   object.category = reader.readString(offsets[0]);
   object.id = id;
-  object.name = reader.readString(offsets[1]);
-  object.password = reader.readString(offsets[2]);
-  object.username = reader.readString(offsets[3]);
+  object.incomingAccounts = reader.readStringList(offsets[1]) ?? [];
+  object.name = reader.readString(offsets[2]);
+  object.password = reader.readString(offsets[3]);
+  object.username = reader.readString(offsets[4]);
   return object;
 }
 
@@ -109,10 +116,12 @@ P _accountDeserializeProp<P>(
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
+      return (reader.readString(offset)) as P;
+    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -124,13 +133,11 @@ Id _accountGetId(Account object) {
 }
 
 List<IsarLinkBase<dynamic>> _accountGetLinks(Account object) {
-  return [object.incomingAccounts];
+  return [];
 }
 
 void _accountAttach(IsarCollection<dynamic> col, Id id, Account object) {
   object.id = id;
-  object.incomingAccounts
-      .attach(col, col.isar.collection<Account>(), r'incomingAccounts', id);
 }
 
 extension AccountQueryWhereSort on QueryBuilder<Account, Account, QWhere> {
@@ -389,6 +396,233 @@ extension AccountQueryFilter
         upper: upper,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'incomingAccounts',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'incomingAccounts',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'incomingAccounts',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'incomingAccounts',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'incomingAccounts',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'incomingAccounts',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsElementContains(String value,
+          {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'incomingAccounts',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsElementMatches(String pattern,
+          {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'incomingAccounts',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'incomingAccounts',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'incomingAccounts',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'incomingAccounts',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'incomingAccounts',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'incomingAccounts',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'incomingAccounts',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'incomingAccounts',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Account, Account, QAfterFilterCondition>
+      incomingAccountsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'incomingAccounts',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 
@@ -787,69 +1021,7 @@ extension AccountQueryObject
     on QueryBuilder<Account, Account, QFilterCondition> {}
 
 extension AccountQueryLinks
-    on QueryBuilder<Account, Account, QFilterCondition> {
-  QueryBuilder<Account, Account, QAfterFilterCondition> incomingAccounts(
-      FilterQuery<Account> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'incomingAccounts');
-    });
-  }
-
-  QueryBuilder<Account, Account, QAfterFilterCondition>
-      incomingAccountsLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'incomingAccounts', length, true, length, true);
-    });
-  }
-
-  QueryBuilder<Account, Account, QAfterFilterCondition>
-      incomingAccountsIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'incomingAccounts', 0, true, 0, true);
-    });
-  }
-
-  QueryBuilder<Account, Account, QAfterFilterCondition>
-      incomingAccountsIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'incomingAccounts', 0, false, 999999, true);
-    });
-  }
-
-  QueryBuilder<Account, Account, QAfterFilterCondition>
-      incomingAccountsLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'incomingAccounts', 0, true, length, include);
-    });
-  }
-
-  QueryBuilder<Account, Account, QAfterFilterCondition>
-      incomingAccountsLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'incomingAccounts', length, include, 999999, true);
-    });
-  }
-
-  QueryBuilder<Account, Account, QAfterFilterCondition>
-      incomingAccountsLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'incomingAccounts', lower, includeLower, upper, includeUpper);
-    });
-  }
-}
+    on QueryBuilder<Account, Account, QFilterCondition> {}
 
 extension AccountQuerySortBy on QueryBuilder<Account, Account, QSortBy> {
   QueryBuilder<Account, Account, QAfterSortBy> sortByCategory() {
@@ -973,6 +1145,12 @@ extension AccountQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Account, Account, QDistinct> distinctByIncomingAccounts() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'incomingAccounts');
+    });
+  }
+
   QueryBuilder<Account, Account, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1006,6 +1184,13 @@ extension AccountQueryProperty
   QueryBuilder<Account, String, QQueryOperations> categoryProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'category');
+    });
+  }
+
+  QueryBuilder<Account, List<String>, QQueryOperations>
+      incomingAccountsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'incomingAccounts');
     });
   }
 

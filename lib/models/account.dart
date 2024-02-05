@@ -12,10 +12,12 @@ class Account {
   late String username;
   late String password;
 
-  final incomingAccounts = IsarLinks<Account>();
+  //final incomingAccounts = IsarLinks<Account>();
 
   // late bool password_generated;
   // late bool user_password_strong;
+
+  late List<String> incomingAccounts = [];
 
 
 }

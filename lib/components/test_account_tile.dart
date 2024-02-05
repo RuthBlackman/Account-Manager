@@ -20,6 +20,7 @@ class MyAccountTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("${account.name} ${account.incomingAccounts}");
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
         child: GestureDetector(
@@ -47,6 +48,14 @@ class MyAccountTile extends StatelessWidget {
                 Text(
                   account.password,
                 ),
+                // ListView.builder(
+                //   itemCount: account.incomingAccounts.length,
+                //   itemBuilder: (context, index){
+                //     return ListTile(
+                //       title: Text(account.incomingAccounts[index]),
+                //     );
+                //   },
+                // )
               ],
 
             ),

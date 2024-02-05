@@ -1,97 +1,96 @@
 // todo: score for an account is dependent on the user's answers
 
 import 'package:account_manger/components/buttons/my_button.dart';
+import 'package:account_manger/components/more_information_dialog/page_two.dart';
+import 'package:account_manger/models/account.dart';
 import 'package:flutter/material.dart';
-import 'package:account_manger/components/my_checkbox.dart';
 import '../colours.dart';
-import 'more_information_textbox.dart'; // Import your MyCheckbox widget
+import 'more_information_dialog/page_one.dart';
+
 
 class MoreInformationDialog extends StatefulWidget {
-  const MoreInformationDialog({Key? key});
+  final Account account;
+  final void Function(Account)? onDialogChange;
+
+  const MoreInformationDialog({Key? key, required this.account, required this.onDialogChange});
 
   @override
   _MoreInformationDialogState createState() => _MoreInformationDialogState();
 }
 
 class _MoreInformationDialogState extends State<MoreInformationDialog> {
-  bool isTFAon = false; // Add a boolean variable to track the checkbox state
-  bool isEmailRegistered = false;
-  bool wasPasswordGenerated = false;
-  bool isPasswordStrong = false;
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
 
-  final TextEditingController controller = TextEditingController();
+  late Account account;
+
+  late void Function(Account)? onDialogChanged;
+
+  @override
+  void initState() {
+    super.initState();
+    account = widget.account;
+    onDialogChanged = widget.onDialogChange;
+  }
+
+  void onPageChange(account){
+    onDialogChanged!(account);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 50.0),
-      child: SingleChildScrollView(
+
         child: Dialog(
           shape: RoundedRectangleBorder(
               borderRadius:BorderRadius.circular(30.0)),
           child: Padding(
             padding: const EdgeInsets.only(top: 30.0, left: 10, right: 10, bottom: 20),
             child: Container(
-              height: 550,
+              // height: 550,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 10.0),
-                        child: Text(
-                          "Extra Information",
-                          style: TextStyle(fontSize: 30),
+                  // PageView to show multiple pages
+                  Expanded(
+                    child: PageView(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentPage = index;
+                        });
+                      },
+                      children: [
+                        PageOne(account: account, onPageChange: onPageChange),
+                       PageTwo(account:  account),
+
+                      ],
+                    ),
+                  ),
+
+                  // Indicator to show the current page
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      2, // Number of pages
+                          (index) => Container(
+                        width: 10.0,
+                        height: 10.0,
+                        margin: EdgeInsets.symmetric(horizontal: 4.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _currentPage == index ? Colors.blue : Colors.grey,
                         ),
                       ),
-                      MyCheckbox(
-                        checkboxText: 'Have you turned on Two-Factor Authentication for this '
-                            'account?',
-                        value: isTFAon,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            isTFAon = value ?? false;
-                          });
-                        },
-                      ),
-                      MyCheckbox(
-                        checkboxText: 'Do you have an email address registered to this account?',
-                        value: isEmailRegistered,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            isEmailRegistered = value ?? false;
-                          });
-                        },
-                      ),
-                      MoreInformationTextbox(controller: controller),
-                      MyCheckbox(
-                        checkboxText: 'Was this password generated for you?',
-                        value: wasPasswordGenerated,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            wasPasswordGenerated = value ?? false;
-                          });
-                        },
-                      ),
-                      MyCheckbox(
-                        checkboxText: 'Do you believe that this password is strong?',
-                        value: isPasswordStrong,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            isPasswordStrong = value ?? false;
-                          });
-                        },
-                      ),
-                    ],
+                    ),
                   ),
+
                   MyButton(
-                      text: "Save & Close",
+                      text: "Close",
                       fontSize: 16,
                       backgroundColour: greyButton,
                       onButtonClicked: (){
-                        // TODO: store values in db
-
                         // close dialog
                         Navigator.pop(context);
                       }
@@ -101,7 +100,6 @@ class _MoreInformationDialogState extends State<MoreInformationDialog> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
