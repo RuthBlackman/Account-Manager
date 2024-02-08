@@ -64,7 +64,7 @@ class _MoreInformationDialogState extends State<MoreInformationDialog> {
                     },
                     children: [
                       PageOne(account: account, onPageChange: onPageChange),
-                     PageTwo(account:  account),
+                      PageTwo(account:  account, onPageChange: onPageChange,),
 
                     ],
                   ),
