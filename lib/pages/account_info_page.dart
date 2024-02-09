@@ -198,11 +198,11 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
 
     }
 
-    void nextButtonClicked(){
-      print("next");
-
-      // TODO: clear all fields
-    }
+    // void nextButtonClicked(){
+    //   print("next");
+    //
+    //   // TODO: clear all fields
+    // }
 
     return Scaffold(
       appBar: const MyAppBar(title: "Account Information"),
@@ -288,7 +288,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                       padding: const EdgeInsets.only(left: 20.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           // save button
                           ButtonWithIcon(icon: Icons.add, text: "Save", onButtonClicked: saveButtonClicked,),
@@ -297,7 +297,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                           ButtonWithIcon(icon: Icons.exit_to_app, text: "Discard", onButtonClicked: discardButtonClicked,),
 
                           // next button
-                          if (firstTimeUer) ButtonWithIcon(icon: Icons.arrow_forward, text: "Next", onButtonClicked: nextButtonClicked,),
+                          // if (firstTimeUer) ButtonWithIcon(icon: Icons.arrow_forward, text: "Next", onButtonClicked: nextButtonClicked,),
                         ],
                       ),
                     ),
