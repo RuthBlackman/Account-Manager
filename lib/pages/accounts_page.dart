@@ -94,7 +94,8 @@ class _AccountsPageState extends State<AccountsPage> {
                   ),
                 ),
               ),
-              _buildAccountList(),
+
+              Expanded(child: _buildAccountList(),)
             ]
         )
     );
@@ -109,9 +110,6 @@ class _AccountsPageState extends State<AccountsPage> {
       shrinkWrap: true,
       itemBuilder: (context, index){
         final account = currentAccounts[index];
-
-        // print("Accounts list page: ${account.name} has ${account.incomingAccounts}");
-
         return AccountTile(account: account);
       }
     );
