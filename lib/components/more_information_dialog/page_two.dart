@@ -73,7 +73,7 @@ class _PageTwoState extends State<PageTwo> {
           },
 
           switch (hasIncomingAccounts){
-            true => EnterMoreInfoPanel(account: account, typeOfAccess: "SS0", onPanelChanged: onPanelChanged),
+            true => EnterMoreInfoPanel(account: account, typeOfAccess: "SSO", onPanelChanged: onPanelChanged),
             false => SizedBox.shrink(),
           },
 

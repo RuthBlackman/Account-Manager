@@ -123,14 +123,12 @@ class _PageOneState extends State<PageOne> {
                 isEmailRegistered = value ?? false;
               });
               if(isEmailRegistered){
-                // context.read<AccountDatabase>().addAccessType(account.id, "Recovery"); // add account id in page 2
                 List<String> incomingAccounts = account.incomingAccounts.toList();
                 incomingAccounts.add("Recovery:");
                 account.incomingAccounts = incomingAccounts;
               }
 
-              if(!isEmailRegistered){ //
-                // context.read<AccountDatabase>().removeAccessType(account.id, "Recovery");
+              if(!isEmailRegistered){
                 List<String> incomingAccounts = account.incomingAccounts.toList();
                 incomingAccounts.removeWhere((element) => element.contains("Recovery") == true);
                 account.incomingAccounts = incomingAccounts;
@@ -147,14 +145,12 @@ class _PageOneState extends State<PageOne> {
                 usesPasswordManager = value ?? false;
               });
               if(usesPasswordManager){
-                // context.read<AccountDatabase>().addAccessType(account.id, "Password Manager"); // add account id in page 2
                 List<String> incomingAccounts = account.incomingAccounts.toList();
                 incomingAccounts.add("Password Manager:");
                 account.incomingAccounts = incomingAccounts;
               }
 
-              if(!usesPasswordManager){ // else if null, remove all 2FA strings from incoming accounts
-                // context.read<AccountDatabase>().removeAccessType(account.id, "Password Manager");
+              if(!usesPasswordManager){
                 List<String> incomingAccounts = account.incomingAccounts.toList();
                 incomingAccounts.removeWhere((element) => element.contains("Password Manager") == true);
                 account.incomingAccounts = incomingAccounts;
@@ -172,16 +168,14 @@ class _PageOneState extends State<PageOne> {
                 hasIncomingAccounts = value ?? false;
               });
               if(hasIncomingAccounts){
-                // context.read<AccountDatabase>().addAccessType(account.id, "SSO"); // add account id in page 2
                 List<String> incomingAccounts = account.incomingAccounts.toList();
                 incomingAccounts.add("SSO:");
                 account.incomingAccounts = incomingAccounts;
               }
 
-              if(!hasIncomingAccounts){ // else if null, remove all 2FA strings from incoming accounts
-                // context.read<AccountDatabase>().removeAccessType(account.id, "SSO");
+              if(!hasIncomingAccounts){
                 List<String> incomingAccounts = account.incomingAccounts.toList();
-                incomingAccounts.removeWhere((element) => element.contains("SSO") == true);
+                incomingAccounts.removeWhere((element) => element.contains("SSO:") == true);
                 account.incomingAccounts = incomingAccounts;
               }
 
