@@ -52,7 +52,7 @@ class _AccountDropdownState extends State<AccountDropdown> {
     selectedAccounts = [];
 
     for(Account account in accounts){
-      if(selectedIds.contains(account.id)){
+      if(selectedIds.contains(account.id) && account.name != "Account"){
         selectedAccounts.add(account);
       }
     }
@@ -63,6 +63,9 @@ class _AccountDropdownState extends State<AccountDropdown> {
   Widget build(BuildContext context) {
       final accountDatabase = context.watch<AccountDatabase>();
       accounts = accountDatabase.currentAccounts;
+
+      accounts = accountDatabase.currentAccounts.toList();
+      accounts.removeWhere((element) => element.name == "Account");
 
       final _items = accounts
           .map((account) => MultiSelectItem<Account?>(account, account.name))

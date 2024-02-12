@@ -24,38 +24,28 @@ class AccountInfoPage extends StatefulWidget {
 class _AccountInfoPageState extends State<AccountInfoPage> {
   // text editing controllers
   final TextEditingController accountController = TextEditingController(text: "Account");
-
   final TextEditingController usernameController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
 
   //TODO: if first time user, display next button, so they can add more accounts
-  final bool firstTimeUer = true;
+  // final bool firstTimeUser = true;
   // hardcoded for now
 
   late void Function(Account)? onAccountChange;
 
   Account? newAccount;
+  Account? account;
+
+  List<Account> createdAccounts =[];
 
   @override
   void initState() {
     super.initState();
-
   }
 
-  void _showDialog(BuildContext context){
-    showDialog(
-        context: context,
-        builder: (context){
-          return MoreInformationDialog(account: newAccount!, onDialogChange: onDialogChanged,);
-        }
-    );
-  }
 
-  void onDialogChanged(Account updatedAccount){
-    newAccount = updatedAccount;
 
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +54,8 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
 
     print(arguments);
 
-    String category = '';
-    Account? account;
+    String? category = '';
+   // Account? account; // TODO: fix, every time set state is called, a new object is made
     String accountName = 'Account';
 
     if(arguments != null ){
@@ -80,6 +70,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
       if(operation == "add_account"){
         // print("user is adding an account!");
         account = context.read<AccountDatabase>().createEmptyAccount();
+        createdAccounts.add(account!);
 
       }else if (operation == "edit_account" && account != null) {
         // print("user is editing ${account.name} !");
@@ -92,13 +83,12 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
         passwordController.text = account!.password;
 
         // edit category
-        category = account.category;
+        category = account?.category;
 
       }else{
         print("error, ${operation}, ${account}");
       }
     }
-
 
     if(newAccount != null) {
       account = newAccount;
@@ -106,16 +96,82 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
       newAccount = account;
     }
 
-    // int howManyStars(){
-    //
-    // }
+    int numberOfStars(){
+      // 1 star = filled in name, category, username, password
+      // 1 star = at least one checkbox ticked
+      // 1 star = some accounts/devices added
+
+      int total = 0;
+      if(account?.name!= "Account" && account?.category != "" &&
+          account?.username != "" && account?.password != ""){
+        ++total;
+      }
+
+      if(account!.incomingAccounts.toList().isNotEmpty){
+        ++total;
+      }
+
+      for(String string in account!.incomingAccounts.toList()){
+        if(string.substring(string.length-1) != ":"){
+          ++total;
+          break;
+        }
+      }
+
+      return total;
+    }
+
+    int numStars = numberOfStars();
+
+
+
+    void onDialogChanged(Account updatedAccount){
+      newAccount = updatedAccount;
+
+      // either page 1 or page 2 was updated, so need to recalculate number of stars
+      setState(() {
+        numStars = numberOfStars();
+      });
+
+    }
+
+    void _showDialog(BuildContext context){
+      showDialog(
+          context: context,
+          builder: (context){
+            return MoreInformationDialog(account: newAccount!, onDialogChange: onDialogChanged,);
+          }
+      );
+    }
 
     void categoryChanged(String newCategory){
       category = newCategory;
+      account?.category = newCategory;
+      setState(() {
+        numStars = numberOfStars();
+      });
     }
 
     void accountNameChanged(String newAccountName){
       accountName = newAccountName;
+      account?.name = newAccountName;
+      setState(() {
+        numStars = numberOfStars();
+      });
+    }
+
+    void onUsernameChanged(String username){
+      account?.username = username;
+      setState(() {
+        numStars = numberOfStars();
+      });
+    }
+
+    void onPasswordChanged(String password){
+      account?.password = password;
+      setState(() {
+        numStars = numberOfStars();
+      });
     }
 
     void enterMoreInfoButtonClicked(){
@@ -125,11 +181,11 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
 
     void saveButtonClicked(){
       // get the fields
-      String accountCategory = category;
-      String accountUsername = usernameController.text;
-      String accountPassword = passwordController.text;
+      // String accountCategory = category;
+      // String accountUsername = usernameController.text;
+      // String accountPassword = passwordController.text;
 
-      if(category == ""){
+      if(account?.category == ""){
         final snackBar = SnackBar(
           backgroundColor: Colors.red,
           content: const Text('Account must have a category.'),
@@ -142,7 +198,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
           ),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }else if (accountName == 'Account') {
+      }else if (account?.name == 'Account') {
         final snackBar = SnackBar(
           backgroundColor: Colors.red,
           content: const Text('Please tap on \'Account\' to create a name for the account.'),
@@ -160,21 +216,28 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
         // if account exists, simply edit it
         if(account != null){
 
-          account.name= accountName;
-          account.category = accountCategory;
-          account.username = accountUsername;
-          account.password = accountPassword;
+          // account.name= accountName;
+          // account.category = accountCategory;
+          // account.username = accountUsername;
+          // account.password = accountPassword;
 
 
-          context.read<AccountDatabase>().updateAccount(account);
-        }else{ // account is null so create new account
-          // context.read<AccountDatabase>().addAccount(accountName, accountCategory, accountUsername, accountPassword);
-          account?.name= accountName;
-          account?.category = accountCategory;
-          account?.username = accountUsername;
-          account?.password = accountPassword;
 
           context.read<AccountDatabase>().updateAccount(account!);
+        }else{ // account is null so create new account
+          // context.read<AccountDatabase>().addAccount(accountName, accountCategory, accountUsername, accountPassword);
+          // account?.name= accountName;
+          // account?.category = accountCategory;
+          // account?.username = accountUsername;
+          // account?.password = accountPassword;
+
+          context.read<AccountDatabase>().updateAccount(account!);
+        }
+
+        for(Account a in createdAccounts){
+          if(a.name == "Account"){
+            context.read<AccountDatabase>().deleteAccount(a!.id);
+          }
         }
 
         // return to accounts page
@@ -190,9 +253,13 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
       // if user clicked on add account, but then didnt save anything, then delete the account
       if(operation == "add_account"){
         context.read<AccountDatabase>().deleteAccount(account!.id);
-      }
+        context.read<AccountDatabase>().deleteAccount(newAccount!.id);
 
-        //Navigator.pushReplacementNamed(context, '/routing');
+        for(Account a in createdAccounts){
+            context.read<AccountDatabase>().deleteAccount(a!.id);
+        }
+
+      }
 
      Navigator.of(context).pushNamedAndRemoveUntil('/routing', (Route<dynamic> route) => false);
 
@@ -204,10 +271,14 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
     //   // TODO: clear all fields
     // }
 
+
+
     return Scaffold(
+
       appBar: const MyAppBar(title: "Account Information"),
       backgroundColor: blueBackground,
       body: SingleChildScrollView(
+
         child: Column(
           children: [
             // score
@@ -235,6 +306,8 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
               ),
             ),
 
+
+
             // custom container with account functionality
             MyContainer(
               isStarsContainer: false,
@@ -256,6 +329,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                       hintText: "Username",
                       obscureText: false,
                       controller: usernameController,
+                      onTextChanged: onUsernameChanged,
                     )
                 ),
 
@@ -266,6 +340,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                       hintText: "Password",
                       obscureText: true,
                       controller: passwordController,
+                      onTextChanged: onPasswordChanged,
                     )
                 ),
 
@@ -311,14 +386,12 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
               isStarsContainer: true,
               children: [
                 WidgetWithCustomWidth(
-                    widget: const Row(
+                    widget: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        StarIcon(icon: Icons.star),
-                        StarIcon(icon: Icons.star),
-                        StarIcon(icon: Icons.star),
-                        StarIcon(icon: Icons.star),
+                        for (var i = 0; i < numStars; i++) StarIcon(icon: Icons.star),
+                        for (var i = 0; i < 3- numStars; i++) StarIcon(icon: Icons.star_outline),
                       ],
                     )
                 )
