@@ -83,23 +83,23 @@ class _AccountDropdownState extends State<AccountDropdown> {
             items: _items,
             initialValue: selectedAccounts,
             title: const Text("Accounts/Devices"),
-            selectedColor: Colors.blue,
+            selectedColor: Colors.purple,
             decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.1),
-              borderRadius: BorderRadius.all(Radius.circular(40)),
+              color: Colors.purple.withOpacity(0.1),
+              borderRadius: BorderRadius.all(Radius.circular(12.0)),
               border: Border.all(
-                color: Colors.blue,
+                color: Colors.purple,
                 width: 2,
               ),
             ),
             buttonIcon: const Icon(
               Icons.account_circle_sharp,
-              color: Colors.blue,
+              color: Colors.purple,
             ),
             buttonText: Text(
               "Select account/device",
               style: TextStyle(
-                color: Colors.blue[800],
+                color: Colors.purple[800],
                 fontSize: 16,
               ),
             ),

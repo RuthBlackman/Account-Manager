@@ -47,23 +47,28 @@ class _EnterMoreInfoPanelState extends State<EnterMoreInfoPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(type),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        children: [
+          Text(type, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
 
-        MyCheckbox(checkboxText: "Have you created an account or a device that uses this access type?", value: accountAdded, onChanged: onCheckboxChanged),
+          MyCheckbox(checkboxText: "Have you created an account or a device that uses this access type?", value: accountAdded, onChanged: onCheckboxChanged),
 
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
-          child: switch(accountAdded){
-            // if true, then display a dropdown menu of all the accounts and allow the user to click on them, which adds them to incoming accounts
-            true => AccountDropdown(currentAccount:account, onAccountChanged: onAccountChanged, typeOfAccess: type,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
+            child: switch(accountAdded){
+              // if true, then display a dropdown menu of all the accounts and allow the user to click on them, which adds them to incoming accounts
+              true => AccountDropdown(currentAccount:account, onAccountChanged: onAccountChanged, typeOfAccess: type,),
 
-            // if false, then ask the user to create the device/account first and then come back
-            false => Text("Please create account/device first and then come back."),
-          },
-        )
-      ],
+              // if false, then ask the user to create the device/account first and then come back
+              false => Text("Please create account/device first and then come back.", style: TextStyle(color: Colors.red),),
+            },
+          ),
+
+          Divider(),
+        ],
+      ),
     );
   }
 }
