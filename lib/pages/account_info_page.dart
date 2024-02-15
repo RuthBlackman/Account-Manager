@@ -11,6 +11,7 @@ import 'package:account_manger/components/star_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../helpers/helpers.dart';
 import '../models/account.dart';
 import '../models/account_database.dart';
 
@@ -96,32 +97,37 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
       newAccount = account;
     }
 
-    int numberOfStars(){
-      // 1 star = filled in name, category, username, password
-      // 1 star = at least one checkbox ticked
-      // 1 star = some accounts/devices added
 
-      int total = 0;
-      if(account?.name!= "Account" && account?.category != "" &&
-          account?.username != "" && account?.password != ""){
-        ++total;
-      }
 
-      if(account!.incomingAccounts.toList().isNotEmpty){
-        ++total;
-      }
+    // int numberOfStars(){
+    //   // 1 star = filled in name, category, username, password
+    //   // 1 star = at least one checkbox ticked
+    //   // 1 star = some accounts/devices added
+    //
+    //   int total = 0;
+    //   if(account?.name!= "Account" && account?.category != "" &&
+    //       account?.username != "" && account?.password != ""){
+    //     ++total;
+    //   }
+    //
+    //   if(account!.incomingAccounts.toList().isNotEmpty){
+    //     ++total;
+    //   }
+    //
+    //   for(String string in account!.incomingAccounts.toList()){
+    //     if(string.substring(string.length-1) != ":"){
+    //       ++total;
+    //       break;
+    //     }
+    //   }
+    //
+    //   return total;
+    // }
+    //
 
-      for(String string in account!.incomingAccounts.toList()){
-        if(string.substring(string.length-1) != ":"){
-          ++total;
-          break;
-        }
-      }
+    int numStars = numberOfStars(account!);
 
-      return total;
-    }
-
-    int numStars = numberOfStars();
+    int numPoints = numberOfPoints(account!);
 
 
 
@@ -130,7 +136,8 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
 
       // either page 1 or page 2 was updated, so need to recalculate number of stars
       setState(() {
-        numStars = numberOfStars();
+        numStars = numberOfStars(account!);
+        numPoints = numberOfPoints(account!);
       });
 
     }
@@ -148,7 +155,7 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
       category = newCategory;
       account?.category = newCategory;
       setState(() {
-        numStars = numberOfStars();
+        numStars = numberOfStars(account!);
       });
     }
 
@@ -156,21 +163,21 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
       accountName = newAccountName;
       account?.name = newAccountName;
       setState(() {
-        numStars = numberOfStars();
+        numStars = numberOfStars(account!);
       });
     }
 
     void onUsernameChanged(String username){
       account?.username = username;
       setState(() {
-        numStars = numberOfStars();
+        numStars = numberOfStars(account!);
       });
     }
 
     void onPasswordChanged(String password){
       account?.password = password;
       setState(() {
-        numStars = numberOfStars();
+        numStars = numberOfStars(account!);
       });
     }
 
@@ -271,6 +278,15 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
     //   // TODO: clear all fields
     // }
 
+    MaterialColor scoreColour(int points){
+      if(points <2){
+        return Colors.red;
+      }else if(points <4) {
+        return Colors.orange;
+      }else{
+        return Colors.green;
+      }
+    }
 
 
     return Scaffold(
@@ -291,13 +307,13 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                   height: 80,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: green,
+                    color: scoreColour(numPoints),
                   ),
-                  child: const Align(
+                  child:  Align(
                       alignment: Alignment.center,
                       child: Text(
-                        "0",
-                        style: TextStyle(
+                        "$numPoints",
+                        style: const TextStyle(
                           fontSize: 30,
                         ),
                       )
