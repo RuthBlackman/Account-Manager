@@ -37,7 +37,7 @@ class _RoutingState extends State<Routing> {
   final List<String> _names = [
     "Accounts",
     "Security Report",
-    "Profile",
+    "Achievements",
     "Settings",
   ];
 
