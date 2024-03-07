@@ -288,7 +288,6 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
       }
     }
 
-
     return Scaffold(
 
       appBar: const MyAppBar(title: "Account Information"),
@@ -322,61 +321,48 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
               ),
             ),
 
-
-
-            // custom container with account functionality
-            MyContainer(
-              isStarsContainer: false,
-              height: 500,
-              children: [
-                // account name
-                WidgetWithCustomWidth(widget: AccountNameWidget( accountName: accountController.text, onAccountNameChanged: accountNameChanged)),
-
-                // category
-                WidgetWithCustomWidth(
-                  widget: CategoryDropdown(category: category, onCategoryChanged: categoryChanged),
-                  width: 250,
+            // container with account functionality
+            Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
                 ),
-
-                // username
-                WidgetWithCustomWidth(
-                    width: 250,
-                    widget: MyTextField(
-                      hintText: "Username",
-                      obscureText: false,
-                      controller: usernameController,
-                      onTextChanged: onUsernameChanged,
-                    )
-                ),
-
-                // password
-                WidgetWithCustomWidth(
-                    width: 250,
-                    widget: MyTextField(
-                      hintText: "Password",
-                      obscureText: true,
-                      controller: passwordController,
-                      onTextChanged: onPasswordChanged,
-                    )
-                ),
-
-                // open dialog to enter more information
-                WidgetWithCustomWidth(
-                  widget: Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: MyButton(
-                      text: "Enter More Info",
-                      fontSize: 16,
-                      onButtonClicked: enterMoreInfoButtonClicked,
-                      backgroundColour: greyButton,
+                child: Column(
+                  children: [
+                    AccountNameWidget( accountName: accountController.text, onAccountNameChanged: accountNameChanged),
+                    SizedBox(width: 250, child: CategoryDropdown(category: category, onCategoryChanged: categoryChanged)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: MyTextField(
+                        hintText: "Username",
+                        obscureText: false,
+                        controller: usernameController,
+                        onTextChanged: onUsernameChanged,
+                      ),
                     ),
-                  ),
-                  width: 200,
-                ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: MyTextField(
+                        hintText: "Password",
+                        obscureText: true,
+                        controller: passwordController,
+                        onTextChanged: onPasswordChanged
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: MyButton(
+                        text: "Enter More Info",
+                        fontSize: 16,
+                        onButtonClicked: enterMoreInfoButtonClicked,
+                        backgroundColour: greyButton,
+                      ),
+                    ),
 
-                WidgetWithCustomWidth(
-                    widget: Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, bottom: 20.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -392,26 +378,32 @@ class _AccountInfoPageState extends State<AccountInfoPage> {
                         ],
                       ),
                     ),
+                  ],
                 ),
-              ],
+              ),
             ),
 
-            // stars
-            MyContainer(
-              height: 75,
-              isStarsContainer: true,
-              children: [
-                WidgetWithCustomWidth(
-                    widget: Row(
+            // container with stars
+            Padding(
+              padding: const EdgeInsets.only(left: 40, right: 40),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        for (var i = 0; i < numStars; i++) StarIcon(icon: Icons.star),
-                        for (var i = 0; i < 3- numStars; i++) StarIcon(icon: Icons.star_outline),
+                        for (var i = 0; i < numStars; i++) const StarIcon(icon: Icons.star),
+                        for (var i = 0; i < 3- numStars; i++) const StarIcon(icon: Icons.star_outline),
                       ],
                     )
-                )
-              ],
+                  ],
+                ),
+              ),
             )
           ],
         ),
