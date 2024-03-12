@@ -15,6 +15,7 @@ class AccountsPage extends StatefulWidget {
 
 class _AccountsPageState extends State<AccountsPage> {
   TextEditingController searchController = new TextEditingController();
+  String searchText = "";
 
   @override
   void initState(){
@@ -22,6 +23,20 @@ class _AccountsPageState extends State<AccountsPage> {
     super.initState();
   }
 
+  List<Account> filterAccounts(List<Account> unfilteredAccounts){
+    List<Account> filteredAccounts = [];
+
+    if(searchText.length > 1){
+      for(Account a in unfilteredAccounts){
+        if(a.name.toLowerCase().contains(searchText)){
+          filteredAccounts.add(a);
+        }
+      }
+      return filteredAccounts;
+    }else{
+      return unfilteredAccounts;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +58,19 @@ class _AccountsPageState extends State<AccountsPage> {
                         controller: searchController,
                         hintText: "Search...",
                         elevation: MaterialStateProperty.all(0),
+                        onChanged: (String x){
+                          setState(() {
+                            searchText = x;
+                          });
+                        },
                         trailing: [
                           IconButton(
                             icon: const Icon(Icons.search),
                             onPressed: () {
-                              print('Search ${searchController.text}' );
-                              // TODO: filter accounts based on search text
+                              setState(() {
+                                //searchText = searchController.text;
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              });
                             },
                           ),
                           IconButton(
@@ -103,7 +125,7 @@ class _AccountsPageState extends State<AccountsPage> {
 
   Widget _buildAccountList(){
     final accountDatabase = context.watch<AccountDatabase>();
-    List<Account> currentAccounts = accountDatabase.currentAccounts;
+    List<Account> currentAccounts = filterAccounts(accountDatabase.currentAccounts);
 
     return ListView.builder(
       itemCount: currentAccounts.length,
