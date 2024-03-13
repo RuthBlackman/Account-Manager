@@ -17,6 +17,9 @@ class _AccountsPageState extends State<AccountsPage> {
   TextEditingController searchController = new TextEditingController();
   String searchText = "";
 
+  List<String> categories = [];
+  String currentCategory = "";
+
   @override
   void initState(){
     Provider.of<AccountDatabase>(context, listen: false).readAccounts();
@@ -26,20 +29,86 @@ class _AccountsPageState extends State<AccountsPage> {
   List<Account> filterAccounts(List<Account> unfilteredAccounts){
     List<Account> filteredAccounts = [];
 
-    if(searchText.length > 1){
-      for(Account a in unfilteredAccounts){
-        if(a.name.toLowerCase().contains(searchText)){
-          filteredAccounts.add(a);
-        }
-      }
-      return filteredAccounts;
-    }else{
+    List<Account> possibleSearchAccounts = [];
+    List<Account> possibleCategoryAccounts = [];
+
+    if(searchText.length <2 && currentCategory == ""){
       return unfilteredAccounts;
     }
+
+    if(searchText.length >1 && currentCategory == ""){
+      for(Account a in unfilteredAccounts){
+        if(searchText.length > 1){
+          if(a.name.toLowerCase().contains(searchText)){
+            filteredAccounts.add(a);
+          }
+        }
+      }
+    }
+
+    if(searchText.length < 2 && currentCategory != ""){
+      for(Account a in unfilteredAccounts){
+        if(currentCategory != ''){
+          if(a.category == currentCategory){
+            filteredAccounts.add(a);
+          }
+        }
+      }
+    }
+
+    if(searchText.length >1 && currentCategory !=""){
+      for(Account a in unfilteredAccounts){
+        if(searchText.length > 1){
+          if(a.name.toLowerCase().contains(searchText)){
+            possibleSearchAccounts.add(a);
+          }
+        }
+      }
+
+      for(Account a in possibleSearchAccounts){
+        if(currentCategory != ''){
+          if(a.category == currentCategory){
+            possibleCategoryAccounts.add(a);
+          }
+        }
+      }
+
+      possibleSearchAccounts.removeWhere((item) => !possibleCategoryAccounts.contains(item));
+      return possibleSearchAccounts;
+
+    }
+    return filteredAccounts;
+
+    // if(searchText.length > 1){
+    //   for(Account a in unfilteredAccounts){
+    //     if(a.name.toLowerCase().contains(searchText)){
+    //       filteredAccounts.add(a);
+    //     }
+    //   }
+    //   return filteredAccounts;
+    // }else{
+    //   return unfilteredAccounts;
+    // }
+  }
+
+  List<String> getCategories(){
+    final accountDatabase = context.watch<AccountDatabase>();
+    List<Account> currentAccounts = (accountDatabase.currentAccounts);
+    List<String> accountCategories = [];
+
+    for(Account a in currentAccounts){
+      if(!accountCategories.contains(a.category)){
+        accountCategories.add(a.category);
+      }
+    }
+
+    return accountCategories;
   }
 
   @override
   Widget build(BuildContext context) {
+    categories = getCategories();
+
     return Container(
         color: blueBackground,
         width: MediaQuery.of(context).size.width,
@@ -73,12 +142,33 @@ class _AccountsPageState extends State<AccountsPage> {
                               });
                             },
                           ),
-                          IconButton(
+                          PopupMenuButton<String>(
                             icon: const Icon(Icons.filter_list),
-                            onPressed: () {
-                              // TODO: fetch categories and display them here
+                            onSelected: (String cat){
+                              setState(() {
+                                if(currentCategory == cat){
+                                  currentCategory = "";
+                                }else{
+                                  currentCategory = cat;
+                                }
+
+                              });
                             },
-                          ),
+                            itemBuilder: (BuildContext context) {
+                              return categories.map((String category) {
+                                // return PopupMenuItem<String>(
+                                //   value: category,
+                                //   child: Text(category),
+                                // );
+
+                                return CheckedPopupMenuItem<String>(
+                                  value: category,
+                                  checked: category == currentCategory ? true: false,
+                                  child: Text(category),
+                                );
+                              }).toList();
+                            },
+                          )
                         ]
                     )
                 ),
@@ -117,7 +207,7 @@ class _AccountsPageState extends State<AccountsPage> {
                 ),
               ),
 
-              Expanded(child: _buildAccountList(),)
+              Expanded(child: _buildAccountList(),),
             ]
         )
     );
@@ -128,12 +218,12 @@ class _AccountsPageState extends State<AccountsPage> {
     List<Account> currentAccounts = filterAccounts(accountDatabase.currentAccounts);
 
     return ListView.builder(
-      itemCount: currentAccounts.length,
-      shrinkWrap: true,
-      itemBuilder: (context, index){
-        final account = currentAccounts[index];
-        return AccountTile(account: account);
-      }
+        itemCount: currentAccounts.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index){
+          final account = currentAccounts[index];
+          return AccountTile(account: account);
+        }
     );
   }
 }
