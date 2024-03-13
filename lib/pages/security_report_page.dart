@@ -28,8 +28,16 @@ class _SecurityReportState extends State<SecurityReport> {
   Map<int, List<Account>> sortedScoreAccounts = new Map();
   Map<int, List<Account>> scoreAccounts = new Map();
 
-  
-  void createAccountScoreMap(){
+  // TODO: add more reasons when score becomes more complicated
+  List<String> waysToGetPoints = [
+    "Enable Two-Factor Authentication",
+    "Password should have at least 10 characters",
+    "Store password with Password Manager",
+  ];
+
+  Map<Account, List<String>> recommendationAccounts = new Map();
+
+  void createScoreAccountMap(){
     scoreAccounts.clear();
     sortedScoreAccounts.clear();
 
@@ -60,13 +68,51 @@ class _SecurityReportState extends State<SecurityReport> {
     for (int key in sortedKeys) {
       sortedScoreAccounts[key] = scoreAccounts[key]!;
     }
+  }
 
-    // print(sorted_score_accounts);
+
+  void createRecommendationAccountMap(){
+    recommendationAccounts.clear();
+
+    final accountDatabase = context.watch<AccountDatabase>();
+    List<Account> currentAccounts = accountDatabase.currentAccounts;
+
+    for(Account account in currentAccounts){
+      // create new key, value pair for the account
+      recommendationAccounts[account] = [];
+
+
+      // check if 2fa enabled
+      if(account.incomingAccounts.where((element) => element.contains("2FA")).isEmpty){
+        // get account's recommendations list
+        List<String>? recommendations = recommendationAccounts[account];
+        // add account to list
+        recommendations?.add(waysToGetPoints[0]);
+        // set value to be updated list
+        recommendationAccounts[account] = recommendations!;
+      }
+
+      // check password length
+      if(account.password.length < 10){
+        List<String>? recommendations = recommendationAccounts[account];
+        recommendations?.add(waysToGetPoints[1]);
+        recommendationAccounts[account] = recommendations!;
+      }
+
+      // check if using password manager
+      if(account.incomingAccounts.where((element) => element.contains("Password Manager")).isEmpty){
+        List<String>? recommendations = recommendationAccounts[account];
+        recommendations?.add(waysToGetPoints[2]);
+        recommendationAccounts[account] = recommendations!;
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    createAccountScoreMap();
+    createScoreAccountMap();
+    createRecommendationAccountMap();
+
     return Scaffold(
       backgroundColor: blueBackground,
       appBar: const MyAppBar(title: "Security Report",),
@@ -79,14 +125,41 @@ class _SecurityReportState extends State<SecurityReport> {
             children: sortedScoreAccounts.entries.map((pair) {
               int key = pair.key;
               List<Account> values = pair.value;
-
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Text("Score: $key", style: const TextStyle(fontWeight: FontWeight.bold),),
+                    Text("Score: $key", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
                     Column(
-                      children: values.map((value) => Text(value.name)).toList(),
+                      //children: values.map((value) => Text(value.name)).toList(),
+                      children: <Widget>[
+                        for(Account account in values)
+                          Column(
+                            children: [
+                              Text(account.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                              const Text("Recommendations:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                              if(recommendationAccounts[account]!.isEmpty)
+                                const Text("Nothing to recommend!"),
+
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  for(String recommendation in recommendationAccounts[account]!)
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text("•"),
+                                        const SizedBox(width: 10,),
+                                        Text(recommendation),
+                                      ],
+                                    )
+                                ],
+                              ),
+                              const SizedBox(height: 20,),
+                            ],
+                          ),
+                        const Divider(),
+                      ],
                     ),
                   ],
                 ),
