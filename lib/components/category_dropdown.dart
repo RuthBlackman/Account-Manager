@@ -11,7 +11,7 @@ class CategoryDropdown extends StatefulWidget {
 
 class _CategoryDropdownState extends State<CategoryDropdown> {
   late String _selectedItem;
-  List<String> categories = ['Email', 'Entertainment', 'Finance', 'Shopping', 'Social Media', 'Password Manager', 'Physical Device', 'Cancel'];
+  List<String> categories = ['Email', 'Entertainment', 'Finance', 'Shopping', 'Social Media', 'Password Manager', 'Physical Device'];
 
   @override
   void initState() {
@@ -41,11 +41,12 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
       hint: const Text('Category'),
       onChanged: (String? newValue) {
         setState(() {
-          if(newValue == 'Cancel'){
+          if(newValue == _selectedItem){
             _selectedItem = '';
           }else{
             _selectedItem = newValue ?? '';
           }
+
           widget.onCategoryChanged(_selectedItem);
         });
       },
