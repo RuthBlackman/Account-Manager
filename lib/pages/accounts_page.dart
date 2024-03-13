@@ -18,7 +18,7 @@ class _AccountsPageState extends State<AccountsPage> {
   String searchText = "";
 
   List<String> categories = [];
-  String currentCategory = "";
+  List<String> selectedCategories = [];
 
   @override
   void initState(){
@@ -32,11 +32,11 @@ class _AccountsPageState extends State<AccountsPage> {
     List<Account> possibleSearchAccounts = [];
     List<Account> possibleCategoryAccounts = [];
 
-    if(searchText.length <2 && currentCategory == ""){
+    if(searchText.length <2 && selectedCategories.isEmpty){
       return unfilteredAccounts;
     }
 
-    if(searchText.length >1 && currentCategory == ""){
+    if(searchText.length >1 && selectedCategories.isEmpty){
       for(Account a in unfilteredAccounts){
         if(searchText.length > 1){
           if(a.name.toLowerCase().contains(searchText)){
@@ -46,17 +46,15 @@ class _AccountsPageState extends State<AccountsPage> {
       }
     }
 
-    if(searchText.length < 2 && currentCategory != ""){
+    if(searchText.length < 2 && selectedCategories.isNotEmpty){
       for(Account a in unfilteredAccounts){
-        if(currentCategory != ''){
-          if(a.category == currentCategory){
+          if(selectedCategories.contains(a.category)){
             filteredAccounts.add(a);
           }
-        }
       }
     }
 
-    if(searchText.length >1 && currentCategory !=""){
+    if(searchText.length >1 && selectedCategories.isNotEmpty){
       for(Account a in unfilteredAccounts){
         if(searchText.length > 1){
           if(a.name.toLowerCase().contains(searchText)){
@@ -66,8 +64,8 @@ class _AccountsPageState extends State<AccountsPage> {
       }
 
       for(Account a in possibleSearchAccounts){
-        if(currentCategory != ''){
-          if(a.category == currentCategory){
+        if(selectedCategories.isNotEmpty){
+          if(selectedCategories.contains(a.category)){
             possibleCategoryAccounts.add(a);
           }
         }
@@ -78,17 +76,6 @@ class _AccountsPageState extends State<AccountsPage> {
 
     }
     return filteredAccounts;
-
-    // if(searchText.length > 1){
-    //   for(Account a in unfilteredAccounts){
-    //     if(a.name.toLowerCase().contains(searchText)){
-    //       filteredAccounts.add(a);
-    //     }
-    //   }
-    //   return filteredAccounts;
-    // }else{
-    //   return unfilteredAccounts;
-    // }
   }
 
   List<String> getCategories(){
@@ -137,7 +124,6 @@ class _AccountsPageState extends State<AccountsPage> {
                             icon: const Icon(Icons.search),
                             onPressed: () {
                               setState(() {
-                                //searchText = searchController.text;
                                 FocusManager.instance.primaryFocus?.unfocus();
                               });
                             },
@@ -146,24 +132,19 @@ class _AccountsPageState extends State<AccountsPage> {
                             icon: const Icon(Icons.filter_list),
                             onSelected: (String cat){
                               setState(() {
-                                if(currentCategory == cat){
-                                  currentCategory = "";
+                                if(selectedCategories.contains(cat)){
+                                  selectedCategories.removeWhere((item) => item == cat);
                                 }else{
-                                  currentCategory = cat;
+                                  selectedCategories.add(cat);
                                 }
 
                               });
                             },
                             itemBuilder: (BuildContext context) {
                               return categories.map((String category) {
-                                // return PopupMenuItem<String>(
-                                //   value: category,
-                                //   child: Text(category),
-                                // );
-
                                 return CheckedPopupMenuItem<String>(
                                   value: category,
-                                  checked: category == currentCategory ? true: false,
+                                  checked: selectedCategories.contains(category) ? true: false,
                                   child: Text(category),
                                 );
                               }).toList();
