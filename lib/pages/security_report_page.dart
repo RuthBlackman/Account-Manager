@@ -6,6 +6,7 @@
 import 'package:account_manger/colours.dart';
 import 'package:account_manger/components/my_appbar.dart';
 import 'package:account_manger/components/my_container.dart';
+import 'package:account_manger/components/recommendation_tile.dart';
 import 'package:account_manger/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -70,7 +71,6 @@ class _SecurityReportState extends State<SecurityReport> {
     }
   }
 
-
   void createRecommendationAccountMap(){
     recommendationAccounts.clear();
 
@@ -125,45 +125,7 @@ class _SecurityReportState extends State<SecurityReport> {
             children: sortedScoreAccounts.entries.map((pair) {
               int key = pair.key;
               List<Account> values = pair.value;
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Text("Score: $key", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-                    Column(
-                      //children: values.map((value) => Text(value.name)).toList(),
-                      children: <Widget>[
-                        for(Account account in values)
-                          Column(
-                            children: [
-                              Text(account.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
-                              const Text("Recommendations:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-                              if(recommendationAccounts[account]!.isEmpty)
-                                const Text("Nothing to recommend!"),
-
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  for(String recommendation in recommendationAccounts[account]!)
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text("•"),
-                                        const SizedBox(width: 10,),
-                                        Text(recommendation),
-                                      ],
-                                    )
-                                ],
-                              ),
-                              const SizedBox(height: 20,),
-                            ],
-                          ),
-                        const Divider(),
-                      ],
-                    ),
-                  ],
-                ),
-              );
+              return RecommendationTile(score: key, values: values, recommendationAccounts: recommendationAccounts);
             }).toList(),
           ),
           )
