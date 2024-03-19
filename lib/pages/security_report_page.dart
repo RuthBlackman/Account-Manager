@@ -131,6 +131,27 @@ class _SecurityReportState extends State<SecurityReport> {
           )
         ],
       ),
+      // body: Padding(
+      //       padding: const EdgeInsets.all(40.0),
+      //       child: Container(
+      //         height: 500,
+      //         decoration: BoxDecoration(
+      //           borderRadius: BorderRadius.circular(20.0),
+      //               color: Colors.white,
+      //         ),
+      //         alignment: Alignment.center,
+      //         child: SingleChildScrollView(
+      //           child: Column(
+      //
+      //               children: sortedScoreAccounts.entries.map((pair) {
+      //                 int key = pair.key;
+      //                 List<Account> values = pair.value;
+      //                 return RecommendationTile(score: key, values: values, recommendationAccounts: recommendationAccounts);
+      //               }).toList(),
+      //             ),
+      //         ),
+      //       ),
+      //     ),
     );
   }
 }

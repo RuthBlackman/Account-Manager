@@ -13,13 +13,17 @@ class FirstTimePage extends StatelessWidget {
     return Scaffold(
       appBar: const MyAppBar(title: 'Account Information',),
       backgroundColor: blueBackground,
-      body: Container(
-        child: MyContainer(
-          isStarsContainer: false,
-          height: 800,
-          children: [
-            WidgetWithCustomWidth(
-              widget: const Column(
+      body: Padding(
+        padding: const EdgeInsets.all(40.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: Colors.white,
+          ),
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              const Column(
                 children: [
                   MyText(text: "Welcome!", size: 30),
                   MyText(text: "Get started with the app by adding your account details.", size: 20),
@@ -29,11 +33,10 @@ class FirstTimePage extends StatelessWidget {
                       "accounts.", size: 20),
                 ],
               ),
-            ),
-            WidgetWithCustomWidth(widget: const SizedBox(height: 30)),
 
-            WidgetWithCustomWidth(
-              widget: MyButton(
+              const SizedBox(height: 30),
+
+              MyButton(
                 text: "Continue",
                 backgroundColour: greyButton,
                 fontSize: 16,
@@ -47,21 +50,18 @@ class FirstTimePage extends StatelessWidget {
                   );
                 },
               ),
-              width: 160,
-            ),
 
-            WidgetWithCustomWidth(widget: const SizedBox(height: 20)),
+              const SizedBox(height: 20),
 
-            WidgetWithCustomWidth(
-              widget: MyButton(
+              MyButton(
                 text: "Privacy Policy",
                 backgroundColour: greyButton,
                 fontSize: 16,
                 onButtonClicked: (){},
               ),
-              width: 160,
-            )
-          ],
+
+            ],
+          ),
         ),
       ),
     );

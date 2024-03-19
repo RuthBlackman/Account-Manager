@@ -1,7 +1,7 @@
-import 'package:account_manger/colours.dart';
 import 'package:account_manger/components/buttons/my_button.dart';
-import 'package:account_manger/components/my_container.dart';
 import 'package:flutter/material.dart';
+
+import '../colours.dart';
 
 enum Problems {
   passwordReused,
@@ -53,23 +53,22 @@ class _LatestReportState extends State<LatestReport> {
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.only(top: 20.0),
-          //   child: Text(
-          //     "Welcome",
-          //     style: TextStyle(
-          //         fontSize: 20,
-          //         color: purpleBackground),
-          //   ),
-          // ),
-
-          Container(
-            width: 300,
-            child: MyContainer(
-                children: [
-                  WidgetWithCustomWidth(
-                      widget: const Padding(
-                        padding: EdgeInsets.all(10.0),
+          Expanded(
+            child: Padding(
+              //    padding: const EdgeInsets.all(40.0),
+              padding: const EdgeInsets.only(top: 40, left: 70, right: 70, bottom: 100),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  color: Colors.white,
+                ),
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Text(
                           "Latest Report",
                           textAlign: TextAlign.center,
@@ -77,31 +76,33 @@ class _LatestReportState extends State<LatestReport> {
                             fontSize: 20,
                           ),
                         ),
-                      )
-                  ),
-                  WidgetWithCustomWidth(
-                    widget: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "${numberOfProblems(generateProblemsMap())} problems",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold),// todo: edit this when we have actual data
                       ),
-                    ),
-                  ),
-                  WidgetWithCustomWidth(widget: Column(
-                    children: [
-                      ..._buildProblemWidgets(generateProblemsMap())
+
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "${numberOfProblems(generateProblemsMap())} problems",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontWeight: FontWeight.bold),// todo: edit this when we have actual data
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            ..._buildProblemWidgets(generateProblemsMap())
+                          ],
+                        ),
+                      ),
                     ],
-                  ))
-                ],
-                height: 300,
-                isStarsContainer: false
+                  ),
+                ),
+              ),
             ),
           ),
-
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(bottom: 40.0),
             child: MyButton(
               text: "Start Scan",
               backgroundColour: Colors.white,
