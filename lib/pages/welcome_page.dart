@@ -2,6 +2,8 @@ import 'package:account_manger/colours.dart';
 import 'package:account_manger/components/buttons/my_button.dart';
 import 'package:flutter/material.dart';
 
+import '../helpers/authentication.dart';
+
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
@@ -20,7 +22,23 @@ class WelcomePage extends StatelessWidget {
 
                     const SizedBox(height: 25),
 
-                    MyButton(text: "Continue", fontSize: 20, backgroundColour: lightBlue, onButtonClicked: (){Navigator.pushReplacementNamed(context, '/first_time_page');})
+                    MyButton(
+                        text: "Continue",
+                        fontSize: 20,
+                        backgroundColour: lightBlue,
+                        // onButtonClicked: (){
+                        //   Navigator.pushReplacementNamed(context, '/first_time_page');
+                        // })
+                        onButtonClicked: () async {
+                          // only navigate further into app if the user is authenticated
+                          bool auth = await Authentication.authentication();
+                          if(auth){
+                            Navigator.pushReplacementNamed(
+                              context,  "/first_time_page",
+                            );
+                          }
+                        }
+                    ),
                   ]
               )
           )
