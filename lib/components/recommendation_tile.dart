@@ -59,7 +59,14 @@ class _RecommendationTileState extends State<RecommendationTile> {
                                 children: [
                                   const Text("•"),
                                   const SizedBox(width: 10,),
-                                  Text(recommendation),
+                                  // Text(recommendation),
+                                  Expanded(
+                                    child: Text(
+                                      recommendation,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2, // Limit to 2 lines
+                                    ),
+                                  ),
                                 ],
                               )
                           ],

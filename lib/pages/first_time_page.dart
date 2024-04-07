@@ -34,8 +34,6 @@ class FirstTimePage extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 30),
-
               MyButton(
                 text: "Continue",
                 backgroundColour: greyButton,
@@ -51,14 +49,6 @@ class FirstTimePage extends StatelessWidget {
                 },
               ),
 
-              const SizedBox(height: 20),
-
-              MyButton(
-                text: "Privacy Policy",
-                backgroundColour: greyButton,
-                fontSize: 16,
-                onButtonClicked: (){},
-              ),
 
             ],
           ),
