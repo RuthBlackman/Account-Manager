@@ -1,3 +1,5 @@
+import 'package:account_manger/constants/waysToGetPoints.dart';
+
 import '../models/account.dart';
 
 int numberOfStars(Account account){
@@ -52,4 +54,27 @@ int numberOfPoints(Account account){
   }
 
   return total;
+}
+
+List<String> getRecommendations(Account account){
+  List<String> recommendations = [];
+
+  // check if 2fa enabled
+  if(account.incomingAccounts.where((element) => element.contains("2FA")).isEmpty){
+    // add account to list
+    recommendations.add(WaysToGetPointsHelper.getValue(WaysToGetPoints.TwoFactorAuthentication));
+  }
+
+  // check password length
+  if(account.password.length < 10){
+    recommendations.add(WaysToGetPointsHelper.getValue(WaysToGetPoints.LongPassword));
+  }
+
+  // check if using password manager
+  if(account.incomingAccounts.where((element) => element.contains("Password Manager")).isEmpty){
+    recommendations.add(WaysToGetPointsHelper.getValue(WaysToGetPoints.PasswordManager));
+  }
+
+  return recommendations;
+
 }

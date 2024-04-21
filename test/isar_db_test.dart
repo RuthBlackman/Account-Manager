@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:account_manger/helpers/helpers.dart';
 import 'package:account_manger/models/account.dart';
 import 'package:account_manger/models/app_settings.dart';
@@ -274,6 +273,8 @@ void main() {
     });
   });
 
+
+
   group("Testing Gamification (Stars + Points)", () {
     test("Filling in only basic account details is worth 1 star", () async {
       await isarTest.writeTxn(() async {
@@ -375,6 +376,28 @@ void main() {
     });
 
   });
+
+
+  group("Testing account recommendations", () {
+    test("Calculate list of recommendations to improve account security", () async {
+      await isarTest.writeTxn(() async {
+        await isarTest.accounts.put(weak_account);
+      });
+
+      final acc = await isarTest.accounts.get(weak_account.id);
+
+      final recommendations = getRecommendations(acc!);
+
+      expect(recommendations, ["Enable Two-Factor Authentication", "Password should have at least 10 characters", "Store password with Password Manager"]);
+
+
+      await isarTest.writeTxn(() async {
+        await isarTest.accounts.clear();
+      } );
+    });
+  });
+
+
 
   tearDownAll(() async {
     await isarTest.close(deleteFromDisk: true);
