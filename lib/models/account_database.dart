@@ -78,6 +78,7 @@ class AccountDatabase extends ChangeNotifier{
   Future<void> readAccounts() async{
     // fetch all accounts from db
     List<Account> fetchedAccounts = await isar.accounts.where().findAll();
+    fetchedAccounts.removeWhere((element) => element.name == "Account");
 
     // give to current accounts
     currentAccounts.clear();
