@@ -1,12 +1,11 @@
 import 'package:account_manger/components/buttons/my_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../colours.dart';
-
-enum Problems {
-  passwordReused,
-  MFANotActivated,
-}
+import '../models/account.dart';
+import '../models/account_database.dart';
 
 class LatestReport extends StatefulWidget {
   const LatestReport({super.key});
@@ -16,38 +15,75 @@ class LatestReport extends StatefulWidget {
 }
 
 class _LatestReportState extends State<LatestReport> {
-  // todo need to latest report (ie number of distinct problems, and number of accounts affected by those problems)
+  // map: problem -> num accounts
+  // problems: no 2fa, no password manager, password below 10 chars
 
-  // to demonstrate how page will look
-  Map<Problems, int> generateProblemsMap() {
-    return {
-      Problems.passwordReused: 1,
-      Problems.MFANotActivated: 2,
-    };
+  Map<String, int> problemsMap = new Map();
+  List<String> problems = ["Two-factor authentication not enabled", "Password manager "
+      "not storing password", "Password length below 10 characters"];
+
+  Map<String, int> createProblemsMap() {
+    problemsMap.clear();
+
+    final accountDatabase = context.watch<AccountDatabase>();
+    List<Account> currentAccounts = accountDatabase.currentAccounts;
+
+    for (Account account in currentAccounts){
+      // check if 2fa enabled
+      if(account.incomingAccounts.where((element) => element.contains("2FA")).isEmpty){
+        // check if problem is in map
+        if(problemsMap.containsKey(problems[0])){
+          problemsMap[problems[0]] = (problemsMap[problems[0]])! + 1;
+        }else {
+          problemsMap[problems[0]] = 1;
+        }
+      }
+
+      // check if pwd stored in password manager
+      if(account.incomingAccounts.where((element) => element.contains("Password Manager")).isEmpty){
+        if(problemsMap.containsKey(problems[1])){
+          problemsMap[problems[1]] = (problemsMap[problems[1]])! + 1;
+        }else{
+          problemsMap[problems[1]] = 1;
+        }
+      }
+
+      // check pwd length
+      if(account.password.length < 10){
+        if(problemsMap.containsKey(problems[2])){
+          problemsMap[problems[2]] = (problemsMap[problems[2]])! + 1;
+        }else{
+          problemsMap[problems[2]] = 1;
+        }
+      }
+    }
+    return problemsMap;
+
   }
 
-  int numberOfProblems(Map<Problems, int> problemsMap) {
-    return problemsMap.length;
-  }
-
-  // Function to build Text widgets for each problem
-  List<Widget> _buildProblemWidgets(Map<Problems, int> problemsMap) {
+  List<Widget> _buildProblemWidgets(Map<String, int> problemsMap) {
     List<Widget> widgets = [];
 
     problemsMap.forEach((problem, number) {
       widgets.add(Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          '${problem.toString().split('.').last}: $number',
-          style: TextStyle(fontSize: 16),
-        ),
-      ));
+          padding: const EdgeInsets.all(8.0),
+          child: Text.rich(TextSpan(
+            style: DefaultTextStyle.of(context).style,
+            children: <TextSpan>[
+              TextSpan(text: "${number}x ", style: const TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: problem),
+            ],
+          ),
+          )
+      )
+      );
     });
     return widgets;
   }
 
   @override
   Widget build(BuildContext context) {
+    createProblemsMap();
     return Container(
       color: blueBackground,
       width: MediaQuery.of(context).size.width,
@@ -81,9 +117,9 @@ class _LatestReportState extends State<LatestReport> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "${numberOfProblems(generateProblemsMap())} problems",
+                          "${createProblemsMap().length} problems",
                           textAlign: TextAlign.center,
-                          style: const TextStyle(fontWeight: FontWeight.bold),// todo: edit this when we have actual data
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ),
 
@@ -91,7 +127,7 @@ class _LatestReportState extends State<LatestReport> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            ..._buildProblemWidgets(generateProblemsMap())
+                            ..._buildProblemWidgets(createProblemsMap())
                           ],
                         ),
                       ),
@@ -108,7 +144,6 @@ class _LatestReportState extends State<LatestReport> {
               backgroundColour: Colors.white,
               fontSize: 16,
               onButtonClicked: (){
-                // TODO: open security report and start scan
                 Navigator.pushNamed(context, '/security_report');
               },
             ),
