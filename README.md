@@ -38,6 +38,8 @@ Now all the tools should be ready.
 - Open the device manager and start the virtual device
 - Run main.dart, which will open up the terminal to inform you of the build progress and automatically open the application on the device
 
+---
+
 ## Code Structure
 Important folders and their uses:
 - **assets:** contains images to be used within the project
